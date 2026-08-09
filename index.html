@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Happy Birthday, Aqsa 🤍</title>
-<meta name="description" content="A little luxury surprise for Aqsa, from Iqra." />
+<title>Happy Birthday, Aqsa 💗</title>
+<meta name="description" content="A little surprise for someone very special — from Iqra." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,126 +16,79 @@
 
 <canvas id="ambient" aria-hidden="true"></canvas>
 
-<!-- ===== Sealed Envelope Gate ===== -->
-<div id="envelope-screen">
-  <div class="envelope-wrap">
-    <p class="envelope-label">a private letter for</p>
-    <p class="envelope-name">Aqsa</p>
-    <div class="envelope" id="envelope">
-      <div class="envelope-shadow"></div>
-      <div class="envelope-body">
-        <div class="letter-peek"></div>
-        <div class="flap"></div>
-        <button class="seal" id="sealBtn" aria-label="Open the letter">
-          <span class="seal-glyph">A</span>
-        </button>
-      </div>
-    </div>
-    <p class="tap-hint">tap the seal to open</p>
-  </div>
+<!-- ===== Opening screen ===== -->
+<div id="openScreen">
+  <p class="open-eyebrow reveal-in">a little surprise for someone very special&hellip;</p>
+  <button class="open-btn reveal-in" id="openBtn">
+    <span>Open Your Surprise</span> <span class="gift">🎁</span>
+  </button>
 </div>
 
-<!-- ===== Main Experience ===== -->
+<!-- ===== Main experience ===== -->
 <main id="main-content" hidden>
 
-  <!-- Hero -->
+  <!-- Cinematic reveal -->
   <section class="hero" id="hero">
-    <p class="eyebrow reveal">15 . 08</p>
-    <h1 class="foil-text reveal">Happy Birthday</h1>
-    <h2 class="name-script reveal">Aqsa</h2>
-    <p class="hero-sub reveal">a small, luxury little surprise — made just for you, by Iqra</p>
+    <p class="hero-kicker reveal">for</p>
+    <h1 class="name-reveal reveal" id="nameReveal">AQSA</h1>
+    <p class="hero-line reveal">Happy Birthday, Meri Jaan <span class="heart">💗</span></p>
+    <p class="hero-from reveal">from Iqra</p>
     <button class="scroll-cue reveal" id="scrollCue">
-      <span>read your letter</span>
+      <span>keep going</span>
       <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1V19M7 19L1 13M7 19L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </section>
 
-  <!-- Letter -->
-  <section class="letter-section" id="letterSection">
-    <div class="letter-card reveal">
-      <span class="corner tl"></span><span class="corner tr"></span>
-      <span class="corner bl"></span><span class="corner br"></span>
+  <!-- Emotional message -->
+  <section class="emotion-section" id="emotionSection">
+    <p class="line-reveal" data-line>Aqsa, meri jaan.</p>
+    <p class="line-reveal" data-line>You're the friend who feels like home —</p>
+    <p class="line-reveal" data-line>the one I trust with my silences, not just my stories.</p>
+    <p class="line-reveal" data-line>My jigar ka tukra. My bachaa. Mine, always.</p>
+    <p class="line-reveal" data-line>So today, this little corner of the internet is only for you.</p>
+  </section>
 
-      <p class="letter-kicker">to my jaan, my jigar ka tukra</p>
-
-      <p class="letter-body">
-        Aqsa, meri jaan — before anything else in this world gets your attention today, this letter gets it first.
-        Today isn't just another day on the calendar. It's the day my favourite person was made — and honestly,
-        I still think it was the best decision the universe ever made.
-      </p>
-      <p class="letter-body">
-        You're not just my best friend. You're the person I text at 2am with nothing important to say, the one who
-        knows my silences as well as my stories, and the one I trust with the messiest, softest, most honest parts
-        of me. My bachaa. My jigar ka tukra. Mine.
-      </p>
-      <p class="letter-body">
-        So today, I wanted to give you something a little different — not flowers that wilt or a message that
-        disappears into a chat, but a tiny corner of the internet that's entirely, unapologetically yours.
-        Scroll on, meri jaan. There's a wish waiting for you.
-      </p>
-
-      <p class="letter-sign">with all my heart,<br><span>Iqra</span></p>
+  <!-- Wish cards -->
+  <section class="wishes-section" id="wishesSection">
+    <h2 class="section-title reveal">a few things I wish for you</h2>
+    <div class="wish-grid">
+      <div class="wish-card reveal">
+        <span class="wish-icon">🤲🏻</span>
+        <h3>Dua</h3>
+        <p>May Allah keep you safe, guided, and loved — in every year that comes after this one.</p>
+      </div>
+      <div class="wish-card reveal">
+        <span class="wish-icon">💗</span>
+        <h3>Friendship</h3>
+        <p>Whatever changes in life, I hope this — us — stays exactly the way it is. Unshaken.</p>
+      </div>
+      <div class="wish-card reveal">
+        <span class="wish-icon">✨</span>
+        <h3>Future</h3>
+        <p>May every version of you still to come be softer with yourself than this one is.</p>
+      </div>
+      <div class="wish-card reveal">
+        <span class="wish-icon">🌸</span>
+        <h3>Happiness</h3>
+        <p>May your peace be loud and your bad days rare and short-lived.</p>
+      </div>
+      <div class="wish-card reveal wish-card--wide">
+        <span class="wish-icon">🫶🏻</span>
+        <h3>Meri Jaan</h3>
+        <p>You never have to earn my love, Aqsa. It's already yours — today, and every ordinary day after it.</p>
+      </div>
     </div>
   </section>
 
-  <!-- Cake / Wish -->
-  <section class="cake-section" id="cakeSection">
-    <h2 class="section-title reveal">Make a wish</h2>
-    <p class="section-sub reveal">tap each flame to blow out the candles</p>
-
-    <div class="cake-stage reveal">
-      <svg id="cakeSvg" viewBox="0 0 300 260" class="cake-svg" role="img" aria-label="Birthday cake with five candles">
-        <ellipse cx="150" cy="235" rx="118" ry="14" class="cake-shadow"/>
-
-        <!-- tier 2 -->
-        <rect x="55" y="150" width="190" height="70" rx="10" class="tier tier2"/>
-        <rect x="55" y="150" width="190" height="14" rx="7" class="tier-icing"/>
-        <g class="drips drips2">
-          <circle cx="80" cy="163" r="6"/><circle cx="120" cy="165" r="5"/>
-          <circle cx="165" cy="163" r="6"/><circle cx="205" cy="165" r="5"/>
-        </g>
-
-        <!-- tier 1 -->
-        <rect x="80" y="95" width="140" height="60" rx="10" class="tier tier1"/>
-        <rect x="80" y="95" width="140" height="14" rx="7" class="tier-icing"/>
-        <g class="drips drips1">
-          <circle cx="100" cy="108" r="5"/><circle cx="140" cy="110" r="4.5"/>
-          <circle cx="180" cy="108" r="5"/>
-        </g>
-
-        <!-- candles -->
-        <g class="candles">
-          <g class="candle" data-candle="1"><rect x="95" y="60" width="8" height="35" class="stick"/><g class="flame-group" data-flame="1"><path class="flame" d="M99 60c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
-          <g class="candle" data-candle="2"><rect x="128" y="52" width="8" height="43" class="stick"/><g class="flame-group" data-flame="2"><path class="flame" d="M132 52c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
-          <g class="candle" data-candle="3"><rect x="146" y="45" width="8" height="50" class="stick"/><g class="flame-group" data-flame="3"><path class="flame" d="M150 45c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
-          <g class="candle" data-candle="4"><rect x="164" y="52" width="8" height="43" class="stick"/><g class="flame-group" data-flame="4"><path class="flame" d="M168 52c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
-          <g class="candle" data-candle="5"><rect x="197" y="60" width="8" height="35" class="stick"/><g class="flame-group" data-flame="5"><path class="flame" d="M201 60c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
-        </g>
-      </svg>
-    </div>
-
-    <p class="wish-msg" id="wishMsg" hidden>wish granted, meri jaan 🤍</p>
-  </section>
-
-  <!-- Keepsakes / gallery -->
-  <section class="gallery-section" id="gallerySection">
-    <h2 class="section-title reveal">Little moments, kept safe</h2>
-    <p class="section-sub reveal">a frame for every memory still to come</p>
-    <div class="frame-grid">
-      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>one</figcaption></figure>
-      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>two</figcaption></figure>
-      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>three</figcaption></figure>
-    </div>
-  </section>
-
-  <!-- Closing -->
-  <section class="closing-section">
-    <p class="closing-eyebrow reveal">last thing, before you go</p>
-    <p class="closing-text reveal">
-      Whatever this year holds, meri jaan — I hope it holds you gently. Happy birthday, Aqsa.
-      I love you more than I'll ever manage to type into a website.
+  <!-- Final surprise -->
+  <section class="final-section" id="finalSection">
+    <p class="final-kicker reveal">tap it, meri jaan</p>
+    <button class="glow-number reveal" id="glowNumber" aria-label="Reveal your birthday surprise">15</button>
+    <p class="final-message" id="finalMessage" hidden>
+      Fifteen years since the world got so much better, Aqsa.<br>
+      Happy Birthday. I love you more than this page could ever hold. 🤍
     </p>
-    <p class="closing-sign reveal">forever your Iqra ✦</p>
+    <p class="final-sign reveal">forever your Iqra ✦</p>
   </section>
 
 </main>
