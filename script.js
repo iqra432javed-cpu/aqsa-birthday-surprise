@@ -3,104 +3,91 @@
    =========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initAmbientDust();
-  initEnvelope();
+  initAmbientStars();
+  initOpenScreen();
   initScrollReveal();
-  initCandles();
+  initLineReveal();
   initScrollCue();
+  initFinalReveal();
 });
 
 /* -----------------------------------------------------------
-   1. Ambient floating gold dust (canvas, lightweight)
+   1. Ambient glowing stars / particles (canvas)
 ----------------------------------------------------------- */
-function initAmbientDust() {
+function initAmbientStars() {
   const canvas = document.getElementById('ambient');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let w, h, particles;
+  let w, h, stars;
 
   function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
   }
 
-  function makeParticles() {
-    const count = Math.min(60, Math.floor((w * h) / 26000));
-    particles = Array.from({ length: count }, () => ({
+  function makeStars() {
+    const count = Math.min(90, Math.floor((w * h) / 18000));
+    stars = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: Math.random() * 1.6 + 0.4,
-      speed: Math.random() * 0.35 + 0.08,
-      drift: Math.random() * 0.6 - 0.3,
-      alpha: Math.random() * 0.5 + 0.15
+      r: Math.random() * 1.4 + 0.3,
+      baseAlpha: Math.random() * 0.5 + 0.2,
+      twinkleSpeed: Math.random() * 0.02 + 0.006,
+      phase: Math.random() * Math.PI * 2,
+      drift: Math.random() * 0.06 - 0.03
     }));
   }
 
+  let t = 0;
   function tick() {
     ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = '#d4af37';
-    particles.forEach(p => {
-      ctx.globalAlpha = p.alpha;
+    stars.forEach(s => {
+      const alpha = s.baseAlpha + Math.sin(t * s.twinkleSpeed + s.phase) * 0.25;
+      ctx.globalAlpha = Math.max(0, alpha);
+      ctx.fillStyle = '#f3dfa4';
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
       ctx.fill();
-      p.y -= p.speed;
-      p.x += p.drift * 0.15;
-      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+      s.y -= s.drift;
+      if (s.y < -5) s.y = h + 5;
     });
     ctx.globalAlpha = 1;
+    t++;
     if (!reduceMotion) requestAnimationFrame(tick);
   }
 
   resize();
-  makeParticles();
+  makeStars();
   tick();
 
   window.addEventListener('resize', () => {
     resize();
-    makeParticles();
+    makeStars();
     if (reduceMotion) tick();
   });
 }
 
 /* -----------------------------------------------------------
-   2. Envelope gate — tap the wax seal to open the letter
+   2. Opening screen — "Open Your Surprise" button
 ----------------------------------------------------------- */
-function initEnvelope() {
-  const sealBtn = document.getElementById('sealBtn');
-  const envelope = document.getElementById('envelope');
-  const screen = document.getElementById('envelope-screen');
+function initOpenScreen() {
+  const openBtn = document.getElementById('openBtn');
+  const openScreen = document.getElementById('openScreen');
   const main = document.getElementById('main-content');
-  if (!sealBtn || !envelope || !screen || !main) return;
+  if (!openBtn || !openScreen || !main) return;
 
-  let opened = false;
+  document.body.style.overflow = 'hidden';
 
-  sealBtn.addEventListener('click', () => {
-    if (opened) return;
-    opened = true;
-
-    envelope.classList.add('open');
-
+  openBtn.addEventListener('click', () => {
+    openScreen.classList.add('hide');
     setTimeout(() => {
-      screen.classList.add('hide');
       main.hidden = false;
       document.body.style.overflow = '';
-      // trigger the hero's own reveal immediately
       requestAnimationFrame(() => revealNow(document.querySelectorAll('.hero .reveal')));
-    }, 950);
+    }, 700);
   });
-
-  // lock scroll behind the gate until opened
-  document.body.style.overflow = 'hidden';
-  const unlock = new MutationObserver(() => {
-    if (main.hidden === false) {
-      document.body.style.overflow = '';
-      unlock.disconnect();
-    }
-  });
-  unlock.observe(main, { attributes: true });
 }
 
 /* -----------------------------------------------------------
@@ -126,51 +113,70 @@ function initScrollReveal() {
 
 function revealNow(nodeList) {
   nodeList.forEach((el, i) => {
-    setTimeout(() => el.classList.add('in'), i * 140);
+    setTimeout(() => el.classList.add('in'), i * 160);
   });
 }
 
 /* -----------------------------------------------------------
-   4. "Read your letter" scroll cue
+   4. Emotional message — lines appear one after another
+----------------------------------------------------------- */
+function initLineReveal() {
+  const lines = document.querySelectorAll('[data-line]');
+  if (!lines.length) return;
+
+  if (!('IntersectionObserver' in window)) {
+    lines.forEach(el => el.classList.add('in'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const index = Array.from(lines).indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('in'), index * 450);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  lines.forEach(el => observer.observe(el));
+}
+
+/* -----------------------------------------------------------
+   5. "keep going" scroll cue
 ----------------------------------------------------------- */
 function initScrollCue() {
   const btn = document.getElementById('scrollCue');
-  const target = document.getElementById('letterSection');
+  const target = document.getElementById('emotionSection');
   if (!btn || !target) return;
   btn.addEventListener('click', () => target.scrollIntoView({ behavior: 'smooth' }));
 }
 
 /* -----------------------------------------------------------
-   5. Candles — tap each flame to blow it out; confetti + wish
+   6. Final glowing number — tap to reveal message + confetti
 ----------------------------------------------------------- */
-function initCandles() {
-  const flames = document.querySelectorAll('.flame-group');
-  const wishMsg = document.getElementById('wishMsg');
-  if (!flames.length) return;
+function initFinalReveal() {
+  const btn = document.getElementById('glowNumber');
+  const msg = document.getElementById('finalMessage');
+  if (!btn || !msg) return;
 
-  let outCount = 0;
-  let celebrated = false;
+  let revealed = false;
 
-  flames.forEach(flame => {
-    flame.addEventListener('click', () => {
-      if (flame.classList.contains('out')) return;
-      flame.classList.add('out');
-      outCount++;
-      if (outCount === flames.length && !celebrated) {
-        celebrated = true;
-        burstConfetti();
-        if (wishMsg) wishMsg.hidden = false;
-      }
-    });
+  btn.addEventListener('click', () => {
+    if (revealed) return;
+    revealed = true;
+    btn.classList.add('tapped');
+    msg.hidden = false;
+    burstConfetti();
   });
 }
 
 /* -----------------------------------------------------------
-   6. Lightweight DOM confetti burst (no external libraries)
+   7. Lightweight DOM confetti burst (no external libraries)
 ----------------------------------------------------------- */
 function burstConfetti() {
-  const colors = ['#d4af37', '#f0d89b', '#e8b4b8', '#f7efe1', '#5c1a2b'];
-  const count = 60;
+  const colors = ['#d4af37', '#f3dfa4', '#e8b4c8', '#f6f1e6', '#8f7127'];
+  const count = 70;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
 
