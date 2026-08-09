@@ -1,4 +1,3 @@
-```javascript
 /* =========================================================
    AQSA — BIRTHDAY SURPRISE
    V2 — Interactive Experience Controller
