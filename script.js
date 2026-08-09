@@ -1,1279 +1,206 @@
-/* =========================================================
-   AQSA — BIRTHDAY SURPRISE
-   V2 — Interactive Experience Controller
-========================================================= */
+/* ===========================================================
+   Aqsa's Birthday — interactions
+   =========================================================== */
 
-"use strict";
+document.addEventListener('DOMContentLoaded', () => {
+  initAmbientDust();
+  initEnvelope();
+  initScrollReveal();
+  initCandles();
+  initScrollCue();
+});
 
+/* -----------------------------------------------------------
+   1. Ambient floating gold dust (canvas, lightweight)
+----------------------------------------------------------- */
+function initAmbientDust() {
+  const canvas = document.getElementById('ambient');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* =========================================================
-   01. DOM
-========================================================= */
+  let w, h, particles;
 
-const screens = {
-    intro: document.getElementById("intro"),
-    name: document.getElementById("name-reveal"),
-    birthday: document.getElementById("birthday"),
-    letter: document.getElementById("letter"),
-    duas: document.getElementById("duas"),
-    final: document.getElementById("final")
-};
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
 
-const buttons = {
-    open: document.getElementById("open-surprise"),
-    nameNext: document.getElementById("continue-one"),
-    birthdayNext: document.getElementById("continue-two"),
-    letterNext: document.getElementById("continue-three"),
-    duasNext: document.getElementById("continue-four"),
-    replay: document.getElementById("replay")
-};
+  function makeParticles() {
+    const count = Math.min(60, Math.floor((w * h) / 26000));
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.6 + 0.4,
+      speed: Math.random() * 0.35 + 0.08,
+      drift: Math.random() * 0.6 - 0.3,
+      alpha: Math.random() * 0.5 + 0.15
+    }));
+  }
 
-const starsContainer =
-    document.getElementById("stars");
+  function tick() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#d4af37';
+    particles.forEach(p => {
+      ctx.globalAlpha = p.alpha;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      p.y -= p.speed;
+      p.x += p.drift * 0.15;
+      if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
+    });
+    ctx.globalAlpha = 1;
+    if (!reduceMotion) requestAnimationFrame(tick);
+  }
 
-const confettiContainer =
-    document.getElementById("confetti-container");
+  resize();
+  makeParticles();
+  tick();
 
-const liveRegion =
-    document.getElementById("live-region");
-
-
-/* =========================================================
-   02. EXPERIENCE STATE
-========================================================= */
-
-const screenOrder = [
-    "intro",
-    "name",
-    "birthday",
-    "letter",
-    "duas",
-    "final"
-];
-
-let currentScreen = "intro";
-
-let isTransitioning = false;
-
-let lastConfettiTime = 0;
-
-
-/* =========================================================
-   03. SAFETY CHECK
-========================================================= */
-
-function elementExists(element) {
-    return element !== null &&
-           element !== undefined;
+  window.addEventListener('resize', () => {
+    resize();
+    makeParticles();
+    if (reduceMotion) tick();
+  });
 }
 
+/* -----------------------------------------------------------
+   2. Envelope gate — tap the wax seal to open the letter
+----------------------------------------------------------- */
+function initEnvelope() {
+  const sealBtn = document.getElementById('sealBtn');
+  const envelope = document.getElementById('envelope');
+  const screen = document.getElementById('envelope-screen');
+  const main = document.getElementById('main-content');
+  if (!sealBtn || !envelope || !screen || !main) return;
 
-/* =========================================================
-   04. STARFIELD
-========================================================= */
+  let opened = false;
 
-function createStars() {
+  sealBtn.addEventListener('click', () => {
+    if (opened) return;
+    opened = true;
 
-    if (!elementExists(starsContainer)) {
-        return;
+    envelope.classList.add('open');
+
+    setTimeout(() => {
+      screen.classList.add('hide');
+      main.hidden = false;
+      document.body.style.overflow = '';
+      // trigger the hero's own reveal immediately
+      requestAnimationFrame(() => revealNow(document.querySelectorAll('.hero .reveal')));
+    }, 950);
+  });
+
+  // lock scroll behind the gate until opened
+  document.body.style.overflow = 'hidden';
+  const unlock = new MutationObserver(() => {
+    if (main.hidden === false) {
+      document.body.style.overflow = '';
+      unlock.disconnect();
     }
-
-    /*
-        Prevent duplicate stars if the
-        initialization function runs again.
-    */
-
-    starsContainer.innerHTML = "";
-
-    const isMobile =
-        window.innerWidth <= 600;
-
-    const starCount =
-        isMobile ? 45 : 85;
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    for (let i = 0; i < starCount; i++) {
-
-        const star =
-            document.createElement("span");
-
-        star.className = "star";
-
-
-        /*
-            Random size
-        */
-
-        const size =
-            Math.random() > 0.9
-                ? 3
-                : Math.random() > 0.5
-                    ? 2
-                    : 1;
-
-
-        /*
-            Random position
-        */
-
-        const left =
-            Math.random() * 100;
-
-        const top =
-            Math.random() * 100;
-
-
-        /*
-            Random animation
-        */
-
-        const delay =
-            Math.random() * 5;
-
-        const duration =
-            2.5 + Math.random() * 4;
-
-
-        star.style.width =
-            `${size}px`;
-
-        star.style.height =
-            `${size}px`;
-
-        star.style.left =
-            `${left}%`;
-
-        star.style.top =
-            `${top}%`;
-
-        star.style.animationDelay =
-            `${delay}s`;
-
-        star.style.animationDuration =
-            `${duration}s`;
-
-
-        fragment.appendChild(star);
-    }
-
-
-    starsContainer.appendChild(fragment);
+  });
+  unlock.observe(main, { attributes: true });
 }
 
+/* -----------------------------------------------------------
+   3. Scroll-triggered reveal for sections
+----------------------------------------------------------- */
+function initScrollReveal() {
+  const items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-/* =========================================================
-   05. GET SCREEN ELEMENT
-========================================================= */
-
-function getScreen(screenName) {
-
-    return screens[screenName] || null;
-
+  items.forEach(el => observer.observe(el));
 }
 
+function revealNow(nodeList) {
+  nodeList.forEach((el, i) => {
+    setTimeout(() => el.classList.add('in'), i * 140);
+  });
+}
 
-/* =========================================================
-   06. SCREEN TRANSITION
-========================================================= */
+/* -----------------------------------------------------------
+   4. "Read your letter" scroll cue
+----------------------------------------------------------- */
+function initScrollCue() {
+  const btn = document.getElementById('scrollCue');
+  const target = document.getElementById('letterSection');
+  if (!btn || !target) return;
+  btn.addEventListener('click', () => target.scrollIntoView({ behavior: 'smooth' }));
+}
 
-function showScreen(
-    screenName,
-    options = {}
-) {
+/* -----------------------------------------------------------
+   5. Candles — tap each flame to blow it out; confetti + wish
+----------------------------------------------------------- */
+function initCandles() {
+  const flames = document.querySelectorAll('.flame-group');
+  const wishMsg = document.getElementById('wishMsg');
+  if (!flames.length) return;
 
-    const {
-        celebrate = true
-    } = options;
+  let outCount = 0;
+  let celebrated = false;
 
+  flames.forEach(flame => {
+    flame.addEventListener('click', () => {
+      if (flame.classList.contains('out')) return;
+      flame.classList.add('out');
+      outCount++;
+      if (outCount === flames.length && !celebrated) {
+        celebrated = true;
+        burstConfetti();
+        if (wishMsg) wishMsg.hidden = false;
+      }
+    });
+  });
+}
 
-    const nextScreen =
-        getScreen(screenName);
+/* -----------------------------------------------------------
+   6. Lightweight DOM confetti burst (no external libraries)
+----------------------------------------------------------- */
+function burstConfetti() {
+  const colors = ['#d4af37', '#f0d89b', '#e8b4b8', '#f7efe1', '#5c1a2b'];
+  const count = 60;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
 
+  for (let i = 0; i < count; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
 
-    /*
-        Invalid screen protection
-    */
+    const size = Math.random() * 8 + 5;
+    const left = Math.random() * 100;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const duration = Math.random() * 1.8 + 2.2;
+    const rotateEnd = Math.random() * 720 - 360;
+    const drift = Math.random() * 160 - 80;
 
-    if (!nextScreen) {
-        console.warn(
-            `Screen "${screenName}" does not exist.`
-        );
+    piece.style.left = left + 'vw';
+    piece.style.width = size + 'px';
+    piece.style.height = size * 0.4 + 'px';
+    piece.style.background = color;
 
-        return;
-    }
+    document.body.appendChild(piece);
 
-
-    /*
-        Prevent accidental double transitions.
-    */
-
-    if (
-        isTransitioning &&
-        screenName !== "intro"
-    ) {
-        return;
-    }
-
-
-    /*
-        Don't transition to the
-        screen we're already viewing.
-    */
-
-    if (
-        screenName === currentScreen &&
-        screenName !== "intro"
-    ) {
-        return;
-    }
-
-
-    isTransitioning = true;
-
-
-    /*
-        Remove active state from every screen.
-    */
-
-    Object.values(screens).forEach(
-        (screen) => {
-
-            if (!elementExists(screen)) {
-                return;
-            }
-
-            screen.classList.remove("active");
-
-        }
-    );
-
-
-    /*
-        Activate the new screen
-        on the next animation frame.
-    */
-
-    requestAnimationFrame(() => {
-
-        nextScreen.classList.add("active");
-
-        currentScreen =
-            screenName;
-
-        announceScreen(
-            screenName
-        );
-
-
-        /*
-            Reset internal scroll position.
-        */
-
-        resetScreenScroll(
-            nextScreen
-        );
-
-
-        /*
-            Release transition lock.
-        */
-
-        window.setTimeout(
-            () => {
-
-                isTransitioning =
-                    false;
-
-            },
-            850
-        );
-
+    const anim = piece.animate([
+      { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+      { transform: `translate(${drift}px, 100vh) rotate(${rotateEnd}deg)`, opacity: 0.9 }
+    ], {
+      duration: duration * 1000,
+      easing: 'cubic-bezier(.22,.68,0,1)',
+      fill: 'forwards'
     });
 
-
-    /*
-        Birthday celebration
-    */
-
-    if (
-        screenName === "birthday" &&
-        celebrate
-    ) {
-
-        window.setTimeout(
-            () => {
-
-                createConfetti(55);
-
-            },
-            650
-        );
-
-    }
-
-
-    /*
-        Final celebration
-    */
-
-    if (
-        screenName === "final" &&
-        celebrate
-    ) {
-
-        window.setTimeout(
-            () => {
-
-                createConfetti(110);
-
-                createSparkleBurst();
-
-            },
-            500
-        );
-
-    }
-
+    anim.onfinish = () => piece.remove();
+  }
 }
-
-
-/* =========================================================
-   07. RESET SCREEN SCROLL
-========================================================= */
-
-function resetScreenScroll(screen) {
-
-    if (!elementExists(screen)) {
-        return;
-    }
-
-
-    const scrollableElements =
-        screen.querySelectorAll(
-            ".letter-wrapper, .duas-content, .final-content"
-        );
-
-
-    scrollableElements.forEach(
-        (element) => {
-
-            element.scrollTop = 0;
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   08. ACCESSIBILITY
-========================================================= */
-
-function announceScreen(screenName) {
-
-    if (!elementExists(liveRegion)) {
-        return;
-    }
-
-
-    const messages = {
-
-        intro:
-            "A surprise is waiting for Aqsa.",
-
-        name:
-            "The surprise is for Aqsa.",
-
-        birthday:
-            "Happy Birthday Aqsa.",
-
-        letter:
-            "A personal birthday letter from Iqra.",
-
-        duas:
-            "Birthday duas for Aqsa.",
-
-        final:
-            "The final birthday surprise for Aqsa."
-
-    };
-
-
-    liveRegion.textContent =
-        messages[screenName] || "";
-
-}
-
-
-/* =========================================================
-   09. CONFETTI
-========================================================= */
-
-function createConfetti(
-    amount = 80
-) {
-
-    if (
-        !elementExists(confettiContainer)
-    ) {
-        return;
-    }
-
-
-    /*
-        Prevent repeated explosions
-        if user clicks extremely quickly.
-    */
-
-    const now =
-        Date.now();
-
-    if (
-        now - lastConfettiTime < 1000
-    ) {
-        return;
-    }
-
-    lastConfettiTime = now;
-
-
-    /*
-        Keep DOM lightweight.
-    */
-
-    if (
-        confettiContainer.children.length > 180
-    ) {
-
-        confettiContainer.innerHTML = "";
-
-    }
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    for (
-        let i = 0;
-        i < amount;
-        i++
-    ) {
-
-        const piece =
-            document.createElement("span");
-
-
-        piece.className =
-            "confetti";
-
-
-        /*
-            Position
-        */
-
-        piece.style.left =
-            `${Math.random() * 100}%`;
-
-
-        /*
-            Animation timing
-        */
-
-        piece.style.animationDuration =
-            `${3 + Math.random() * 4}s`;
-
-        piece.style.animationDelay =
-            `${Math.random() * 0.8}s`;
-
-
-        /*
-            Horizontal movement
-        */
-
-        piece.style.setProperty(
-            "--drift",
-            `${(Math.random() - 0.5) * 260}px`
-        );
-
-
-        /*
-            Random size
-        */
-
-        piece.style.width =
-            `${4 + Math.random() * 5}px`;
-
-        piece.style.height =
-            `${7 + Math.random() * 9}px`;
-
-
-        /*
-            Random shape
-        */
-
-        const shape =
-            Math.random();
-
-
-        if (shape < 0.33) {
-
-            piece.style.borderRadius =
-                "50%";
-
-        }
-        else if (shape < 0.66) {
-
-            piece.style.borderRadius =
-                "2px";
-
-        }
-        else {
-
-            piece.style.borderRadius =
-                "0";
-
-        }
-
-
-        /*
-            Random rotation.
-            This is handled separately from
-            the falling animation.
-        */
-
-        piece.style.setProperty(
-            "--rotation",
-            `${Math.random() * 360}deg`
-        );
-
-
-        fragment.appendChild(piece);
-
-    }
-
-
-    confettiContainer.appendChild(
-        fragment
-    );
-
-
-    /*
-        Remove old pieces later.
-    */
-
-    window.setTimeout(
-        () => {
-
-            const pieces =
-                confettiContainer.querySelectorAll(
-                    ".confetti"
-                );
-
-
-            pieces.forEach(
-                (piece) => {
-
-                    piece.remove();
-
-                }
-            );
-
-        },
-        8500
-    );
-
-}
-
-
-/* =========================================================
-   10. SPARKLE BURST
-========================================================= */
-
-function createSparkleBurst() {
-
-    const finalScreen =
-        screens.final;
-
-
-    if (!elementExists(finalScreen)) {
-        return;
-    }
-
-
-    const sparkleCount = 22;
-
-
-    for (
-        let i = 0;
-        i < sparkleCount;
-        i++
-    ) {
-
-        const sparkle =
-            document.createElement("span");
-
-
-        sparkle.textContent =
-            Math.random() > 0.5
-                ? "✦"
-                : "✧";
-
-
-        sparkle.style.position =
-            "absolute";
-
-
-        sparkle.style.left =
-            "50%";
-
-        sparkle.style.top =
-            "45%";
-
-
-        sparkle.style.color =
-            "rgba(216, 184, 120, 0.85)";
-
-
-        sparkle.style.fontSize =
-            `${10 + Math.random() * 14}px`;
-
-
-        sparkle.style.pointerEvents =
-            "none";
-
-
-        sparkle.style.zIndex =
-            "20";
-
-
-        sparkle.style.opacity =
-            "0";
-
-
-        sparkle.style.transform =
-            "translate(-50%, -50%) scale(0.3)";
-
-
-        sparkle.style.transition =
-            "opacity 1.6s ease-out, transform 1.8s ease-out";
-
-
-        finalScreen.appendChild(
-            sparkle
-        );
-
-
-        requestAnimationFrame(
-            () => {
-
-                const angle =
-                    Math.random() *
-                    Math.PI *
-                    2;
-
-
-                const distance =
-                    70 +
-                    Math.random() *
-                    180;
-
-
-                const x =
-                    Math.cos(angle) *
-                    distance;
-
-
-                const y =
-                    Math.sin(angle) *
-                    distance;
-
-
-                sparkle.style.opacity =
-                    "1";
-
-
-                sparkle.style.transform =
-                    `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1.3)`;
-
-            }
-        );
-
-
-        window.setTimeout(
-            () => {
-
-                sparkle.style.opacity =
-                    "0";
-
-            },
-            900
-        );
-
-
-        window.setTimeout(
-            () => {
-
-                sparkle.remove();
-
-            },
-            2100
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   11. BUTTON LISTENERS
-========================================================= */
-
-
-/*
-    Intro
-*/
-
-if (elementExists(buttons.open)) {
-
-    buttons.open.addEventListener(
-        "click",
-        () => {
-
-            showScreen("name");
-
-        }
-    );
-
-}
-
-
-/*
-    Name
-*/
-
-if (elementExists(buttons.nameNext)) {
-
-    buttons.nameNext.addEventListener(
-        "click",
-        () => {
-
-            showScreen("birthday");
-
-        }
-    );
-
-}
-
-
-/*
-    Birthday
-*/
-
-if (elementExists(buttons.birthdayNext)) {
-
-    buttons.birthdayNext.addEventListener(
-        "click",
-        () => {
-
-            showScreen("letter");
-
-        }
-    );
-
-}
-
-
-/*
-    Letter
-*/
-
-if (elementExists(buttons.letterNext)) {
-
-    buttons.letterNext.addEventListener(
-        "click",
-        () => {
-
-            showScreen("duas");
-
-        }
-    );
-
-}
-
-
-/*
-    Duas
-*/
-
-if (elementExists(buttons.duasNext)) {
-
-    buttons.duasNext.addEventListener(
-        "click",
-        () => {
-
-            showScreen("final");
-
-        }
-    );
-
-}
-
-
-/*
-    Replay
-*/
-
-if (elementExists(buttons.replay)) {
-
-    buttons.replay.addEventListener(
-        "click",
-        () => {
-
-            /*
-                Clear celebrations.
-            */
-
-            confettiContainer.innerHTML = "";
-
-
-            /*
-                Remove sparkle elements.
-            */
-
-            const sparkleElements =
-                screens.final.querySelectorAll(
-                    "span:not(.eyebrow)"
-                );
-
-
-            sparkleElements.forEach(
-                (element) => {
-
-                    if (
-                        element.textContent === "✦" ||
-                        element.textContent === "✧"
-                    ) {
-
-                        element.remove();
-
-                    }
-
-                }
-            );
-
-
-            /*
-                Return to beginning.
-            */
-
-            showScreen(
-                "intro",
-                {
-                    celebrate: false
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   12. KEYBOARD NAVIGATION
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    (event) => {
-
-        /*
-            Ignore keyboard navigation while
-            typing in an input/textarea.
-        */
-
-        const target =
-            event.target;
-
-
-        if (
-            target &&
-            (
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA"
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-            Escape → beginning
-        */
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            showScreen(
-                "intro",
-                {
-                    celebrate: false
-                }
-            );
-
-            return;
-
-        }
-
-
-        /*
-            Right arrow → next
-        */
-
-        if (
-            event.key === "ArrowRight"
-        ) {
-
-            goToNextScreen();
-
-            return;
-
-        }
-
-
-        /*
-            Left arrow → previous
-        */
-
-        if (
-            event.key === "ArrowLeft"
-        ) {
-
-            goToPreviousScreen();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   13. NEXT SCREEN
-========================================================= */
-
-function goToNextScreen() {
-
-    const index =
-        screenOrder.indexOf(
-            currentScreen
-        );
-
-
-    if (
-        index === -1 ||
-        index >= screenOrder.length - 1
-    ) {
-
-        return;
-
-    }
-
-
-    showScreen(
-        screenOrder[index + 1]
-    );
-
-}
-
-
-/* =========================================================
-   14. PREVIOUS SCREEN
-========================================================= */
-
-function goToPreviousScreen() {
-
-    const index =
-        screenOrder.indexOf(
-            currentScreen
-        );
-
-
-    if (
-        index <= 0
-    ) {
-
-        return;
-
-    }
-
-
-    showScreen(
-        screenOrder[index - 1],
-        {
-            celebrate: false
-        }
-    );
-
-}
-
-
-/* =========================================================
-   15. TOUCH SWIPE
-========================================================= */
-
-let touchStartX = 0;
-let touchStartY = 0;
-
-
-document.addEventListener(
-    "touchstart",
-    (event) => {
-
-        const touch =
-            event.changedTouches[0];
-
-
-        if (!touch) {
-            return;
-        }
-
-
-        touchStartX =
-            touch.screenX;
-
-        touchStartY =
-            touch.screenY;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-document.addEventListener(
-    "touchend",
-    (event) => {
-
-        const touch =
-            event.changedTouches[0];
-
-
-        if (!touch) {
-            return;
-        }
-
-
-        const touchEndX =
-            touch.screenX;
-
-        const touchEndY =
-            touch.screenY;
-
-
-        const differenceX =
-            touchEndX -
-            touchStartX;
-
-
-        const differenceY =
-            touchEndY -
-            touchStartY;
-
-
-        /*
-            If vertical movement is greater,
-            this was scrolling — not a swipe.
-        */
-
-        if (
-            Math.abs(differenceY) >
-            Math.abs(differenceX)
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-            Ignore tiny movements.
-        */
-
-        if (
-            Math.abs(differenceX) < 75
-        ) {
-
-            return;
-
-        }
-
-
-        /*
-            Left → next
-        */
-
-        if (
-            differenceX < 0
-        ) {
-
-            goToNextScreen();
-
-        }
-
-
-        /*
-            Right → previous
-        */
-
-        if (
-            differenceX > 0
-        ) {
-
-            goToPreviousScreen();
-
-        }
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================================================
-   16. BUTTON FOCUS
-========================================================= */
-
-document
-    .querySelectorAll("button")
-    .forEach(
-        (button) => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    button.blur();
-
-                }
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   17. WINDOW RESIZE
-========================================================= */
-
-let resizeTimer;
-
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        window.clearTimeout(
-            resizeTimer
-        );
-
-
-        resizeTimer =
-            window.setTimeout(
-                () => {
-
-                    createStars();
-
-                },
-                250
-            );
-
-    }
-);
-
-
-/* =========================================================
-   18. INITIALIZATION
-========================================================= */
-
-function initialize() {
-
-    /*
-        Generate stars.
-    */
-
-    createStars();
-
-
-    /*
-        Make absolutely sure
-        only intro is active.
-    */
-
-    Object.values(screens).forEach(
-        (screen) => {
-
-            if (!elementExists(screen)) {
-                return;
-            }
-
-            screen.classList.remove(
-                "active"
-            );
-
-        }
-    );
-
-
-    screens.intro.classList.add(
-        "active"
-    );
-
-
-    currentScreen =
-        "intro";
-
-
-    isTransitioning =
-        false;
-
-
-    announceScreen(
-        "intro"
-    );
-
-}
-
-
-/* =========================================================
-   19. START
-========================================================= */
-
-if (
-    document.readyState ===
-    "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        initialize,
-        {
-            once: true
-        }
-    );
-
-}
-else {
-
-    initialize();
-
-}
-```
