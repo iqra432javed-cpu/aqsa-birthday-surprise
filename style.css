@@ -1,0 +1,1599 @@
+```css
+/* =========================================================
+   AQSA — BIRTHDAY SURPRISE
+   Luxury Cinematic Birthday Experience
+   Designed for Mobile + Laptop
+========================================================= */
+
+
+/* =========================================================
+   01. ROOT VARIABLES
+========================================================= */
+
+:root {
+    --bg-primary: #09070b;
+    --bg-secondary: #110c12;
+
+    --gold: #d8b878;
+    --gold-light: #f1dca7;
+    --gold-soft: rgba(216, 184, 120, 0.18);
+
+    --pink: #d89aaa;
+    --pink-soft: rgba(216, 154, 170, 0.18);
+
+    --white: #f8f5ef;
+    --white-soft: rgba(248, 245, 239, 0.72);
+    --white-muted: rgba(248, 245, 239, 0.48);
+
+    --border: rgba(216, 184, 120, 0.18);
+    --glass: rgba(255, 255, 255, 0.035);
+
+    --serif: "Cormorant Garamond", Georgia, serif;
+    --sans: "DM Sans", Arial, sans-serif;
+
+    --transition: 0.8s cubic-bezier(0.77, 0, 0.18, 1);
+}
+
+
+/* =========================================================
+   02. RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(216, 184, 120, 0.07),
+            transparent 35%
+        ),
+        var(--bg-primary);
+
+    color: var(--white);
+
+    font-family: var(--sans);
+
+    overflow: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+
+/* =========================================================
+   03. BACKGROUND
+========================================================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: -1;
+}
+
+
+/* Ambient glow */
+
+.ambient-glow {
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    filter: blur(100px);
+
+    opacity: 0.16;
+}
+
+.glow-one {
+    top: -180px;
+    left: -150px;
+
+    background: var(--gold);
+}
+
+.glow-two {
+    right: -180px;
+    bottom: -150px;
+
+    background: var(--pink);
+}
+
+.glow-three {
+    top: 42%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 280px;
+    height: 280px;
+
+    background: rgba(255, 225, 170, 0.08);
+
+    filter: blur(90px);
+}
+
+
+/* Stars */
+
+#stars {
+    position: absolute;
+    inset: 0;
+
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+
+    width: 2px;
+    height: 2px;
+
+    background: rgba(255, 244, 216, 0.65);
+
+    border-radius: 50%;
+
+    animation:
+        twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.15;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 0.9;
+        transform: scale(1.4);
+    }
+}
+
+
+/* =========================================================
+   04. MAIN EXPERIENCE
+========================================================= */
+
+#birthday-experience {
+    position: relative;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   05. SCREEN SYSTEM
+========================================================= */
+
+.screen {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 24px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(30px) scale(0.985);
+
+    transition:
+        opacity var(--transition),
+        transform var(--transition),
+        visibility var(--transition);
+
+    overflow-y: auto;
+}
+
+.screen.active {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0) scale(1);
+
+    z-index: 5;
+}
+
+
+/* =========================================================
+   06. COMMON TYPOGRAPHY
+========================================================= */
+
+.eyebrow {
+    margin-bottom: 22px;
+
+    color: var(--gold);
+
+    font-family: var(--sans);
+
+    font-size: 0.68rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.34em;
+
+    text-transform: uppercase;
+
+    text-align: center;
+}
+
+
+.section-title {
+    margin-bottom: 42px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(3rem, 7vw, 5.5rem);
+
+    font-weight: 500;
+
+    line-height: 0.95;
+
+    text-align: center;
+
+    color: var(--white);
+}
+
+
+/* =========================================================
+   07. INTRO SCREEN
+========================================================= */
+
+.intro-content {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    max-width: 760px;
+
+    animation: contentReveal 1.2s ease both;
+}
+
+@keyframes contentReveal {
+
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.tiny-heart {
+    margin-bottom: 18px;
+
+    color: var(--gold);
+
+    font-family: var(--serif);
+
+    font-size: 2rem;
+
+    animation: heartFloat 3s ease-in-out infinite;
+}
+
+@keyframes heartFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-7px);
+    }
+}
+
+
+.intro-title {
+    margin-bottom: 28px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(3rem, 7vw, 6.5rem);
+
+    font-weight: 500;
+
+    line-height: 0.93;
+
+    letter-spacing: -0.025em;
+
+    background:
+        linear-gradient(
+            120deg,
+            #fff9eb,
+            var(--gold-light),
+            #fff
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+}
+
+
+.intro-subtitle {
+    max-width: 500px;
+
+    margin-bottom: 38px;
+
+    color: var(--white-muted);
+
+    font-size: 0.95rem;
+
+    line-height: 1.9;
+
+    font-weight: 300;
+}
+
+
+/* =========================================================
+   08. BUTTONS
+========================================================= */
+
+.primary-button {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 22px;
+
+    min-width: 235px;
+
+    padding: 16px 24px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 100px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 184, 120, 0.14),
+            rgba(216, 154, 170, 0.07)
+        );
+
+    color: var(--white);
+
+    font-family: var(--sans);
+
+    font-size: 0.72rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.12em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease,
+        background 0.35s ease;
+}
+
+.primary-button::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            100deg,
+            transparent,
+            rgba(255, 255, 255, 0.13),
+            transparent
+        );
+
+    transform: translateX(-120%);
+
+    transition: transform 0.8s ease;
+}
+
+.primary-button:hover::before {
+    transform: translateX(120%);
+}
+
+.primary-button:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(216, 184, 120, 0.55);
+
+    box-shadow:
+        0 15px 45px rgba(216, 184, 120, 0.13);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(216, 184, 120, 0.2),
+            rgba(216, 154, 170, 0.11)
+        );
+}
+
+.primary-button:active {
+    transform: scale(0.97);
+}
+
+.button-arrow {
+    color: var(--gold);
+
+    font-size: 1rem;
+
+    transition: transform 0.3s ease;
+}
+
+.primary-button:hover .button-arrow {
+    transform: translateX(5px);
+}
+
+
+.text-button {
+    margin-top: 38px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--white-muted);
+
+    font-family: var(--sans);
+
+    font-size: 0.7rem;
+
+    letter-spacing: 0.16em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.text-button:hover {
+    color: var(--gold-light);
+
+    transform: translateX(4px);
+}
+
+
+/* =========================================================
+   09. SIGNATURE
+========================================================= */
+
+.signature {
+    margin-top: 32px;
+
+    color: var(--white-muted);
+
+    font-family: var(--serif);
+
+    font-size: 1.15rem;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   10. NAME REVEAL
+========================================================= */
+
+.name-content {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    max-width: 1000px;
+}
+
+
+.giant-name {
+    margin-bottom: 12px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(5rem, 17vw, 13rem);
+
+    font-weight: 500;
+
+    line-height: 0.75;
+
+    letter-spacing: 0.03em;
+
+    background:
+        linear-gradient(
+            110deg,
+            #fff,
+            var(--gold-light),
+            #cda7a9,
+            #fff
+        );
+
+    background-size: 250% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    color: transparent;
+
+    animation: luxuryShine 6s linear infinite;
+}
+
+@keyframes luxuryShine {
+
+    to {
+        background-position: 250% center;
+    }
+}
+
+
+.gold-line {
+    width: 80px;
+    height: 1px;
+
+    margin: 35px auto;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+
+.name-message {
+    color: var(--white-muted);
+
+    font-family: var(--serif);
+
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+
+    line-height: 1.5;
+}
+
+.name-message.emphasis {
+    margin-top: 8px;
+
+    color: var(--gold-light);
+
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   11. BIRTHDAY SCREEN
+========================================================= */
+
+.birthday-content {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    max-width: 850px;
+}
+
+
+.birthday-title {
+    font-family: var(--serif);
+
+    font-size: clamp(3.5rem, 8vw, 7rem);
+
+    font-weight: 500;
+
+    line-height: 0.85;
+
+    color: var(--white);
+}
+
+
+.birthday-name {
+    margin-top: 6px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(3rem, 7vw, 6rem);
+
+    font-weight: 500;
+
+    font-style: italic;
+
+    color: var(--gold-light);
+}
+
+
+.birthday-symbol {
+    margin: 30px 0;
+
+    color: var(--gold);
+
+    font-size: 1.4rem;
+
+    animation:
+        symbolSpin 8s linear infinite;
+}
+
+@keyframes symbolSpin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+.birthday-intro {
+    margin-bottom: 35px;
+
+    color: var(--white-muted);
+
+    font-size: 0.95rem;
+
+    line-height: 1.9;
+
+    font-weight: 300;
+}
+
+
+/* =========================================================
+   12. LETTER SCREEN
+========================================================= */
+
+.letter-wrapper {
+    width: min(760px, 100%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 35px 0;
+}
+
+
+.letter-card {
+    width: 100%;
+
+    border: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.055),
+            rgba(255, 255, 255, 0.018)
+        );
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 30px 100px rgba(0, 0, 0, 0.35);
+
+    overflow: hidden;
+}
+
+
+.letter-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 25px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: var(--gold);
+
+    font-family: var(--serif);
+
+    font-size: 1rem;
+
+    font-style: italic;
+}
+
+
+.letter-body {
+    padding: clamp(30px, 6vw, 55px);
+}
+
+
+.letter-body p {
+    margin-bottom: 22px;
+
+    color: var(--white-soft);
+
+    font-family: var(--serif);
+
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+
+    line-height: 1.75;
+
+    font-weight: 400;
+}
+
+
+.letter-body p:first-child {
+    color: var(--gold-light);
+
+    font-size: 1.6rem;
+
+    font-style: italic;
+}
+
+
+.letter-body .highlight-text {
+    margin: 32px 0;
+
+    color: var(--gold-light);
+
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+
+    text-align: center;
+
+    font-style: italic;
+}
+
+
+.letter-signature {
+    margin-top: 38px;
+
+    color: var(--gold) !important;
+
+    font-size: 1.25rem !important;
+
+    text-align: right;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   13. DUAS SCREEN
+========================================================= */
+
+.duas-content {
+    width: min(1050px, 100%);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    padding: 35px 0;
+}
+
+
+.dua-container {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+}
+
+
+.dua-card {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 3px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.045),
+            rgba(255, 255, 255, 0.015)
+        );
+
+    backdrop-filter: blur(15px);
+
+    -webkit-backdrop-filter: blur(15px);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.4s ease,
+        border-color 0.4s ease,
+        background 0.4s ease;
+}
+
+.dua-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0;
+
+    transition: opacity 0.4s ease;
+}
+
+.dua-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(216, 184, 120, 0.4);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(216, 184, 120, 0.07),
+            rgba(255, 255, 255, 0.02)
+        );
+}
+
+.dua-card:hover::before {
+    opacity: 1;
+}
+
+
+.dua-number {
+    position: absolute;
+
+    top: 20px;
+    right: 25px;
+
+    color: rgba(216, 184, 120, 0.35);
+
+    font-size: 0.65rem;
+
+    letter-spacing: 0.15em;
+}
+
+
+.dua-icon {
+    display: block;
+
+    margin-bottom: 18px;
+
+    font-size: 1.5rem;
+}
+
+
+.dua-card p {
+    max-width: 440px;
+
+    color: var(--white-soft);
+
+    font-family: var(--serif);
+
+    font-size: 1.18rem;
+
+    line-height: 1.6;
+}
+
+
+.ameen {
+    margin-top: 35px;
+
+    color: var(--gold-light);
+
+    font-family: var(--serif);
+
+    font-size: 1.25rem;
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   14. FINAL SCREEN
+========================================================= */
+
+.final-content {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    max-width: 800px;
+
+    padding: 30px 0;
+}
+
+
+.final-sparkles {
+    margin-bottom: 20px;
+
+    color: var(--gold);
+
+    font-size: 1rem;
+
+    letter-spacing: 0.4em;
+
+    animation: sparklePulse 2s ease-in-out infinite;
+}
+
+@keyframes sparklePulse {
+
+    0%,
+    100% {
+        opacity: 0.35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+.final-title {
+    font-family: var(--serif);
+
+    font-size: clamp(3rem, 7vw, 5.5rem);
+
+    font-weight: 400;
+
+    line-height: 0.9;
+}
+
+
+.final-name {
+    margin-top: 5px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(4rem, 10vw, 8rem);
+
+    font-weight: 500;
+
+    font-style: italic;
+
+    color: var(--gold-light);
+
+    line-height: 0.9;
+}
+
+
+.final-message {
+    max-width: 620px;
+
+    margin-top: 30px;
+
+    color: var(--white-muted);
+
+    font-family: var(--serif);
+
+    font-size: 1.2rem;
+
+    line-height: 1.7;
+}
+
+
+.final-emphasis {
+    margin-top: 12px;
+
+    color: var(--gold);
+
+    font-family: var(--serif);
+
+    font-size: 1.7rem;
+
+    font-style: italic;
+}
+
+
+.birthday-number {
+    margin-top: 25px;
+
+    font-family: var(--serif);
+
+    font-size: clamp(6rem, 15vw, 11rem);
+
+    font-weight: 500;
+
+    line-height: 0.8;
+
+    color: transparent;
+
+    -webkit-text-stroke: 1px rgba(216, 184, 120, 0.55);
+
+    text-shadow:
+        0 0 50px rgba(216, 184, 120, 0.08);
+}
+
+
+.final-birthday {
+    margin-top: 14px;
+
+    color: var(--gold);
+
+    font-size: 0.7rem;
+
+    font-weight: 600;
+
+    letter-spacing: 0.55em;
+}
+
+
+.final-divider {
+    width: 90px;
+    height: 1px;
+
+    margin: 28px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+
+.final-signature {
+    color: var(--white-muted);
+
+    font-family: var(--serif);
+
+    font-size: 1.15rem;
+
+    line-height: 1.7;
+
+    font-style: italic;
+}
+
+
+.final-signature strong {
+    color: var(--gold-light);
+
+    font-weight: 500;
+}
+
+
+.replay-button {
+    margin-top: 35px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--white-muted);
+
+    font-family: var(--sans);
+
+    font-size: 0.65rem;
+
+    font-weight: 500;
+
+    letter-spacing: 0.18em;
+
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.replay-button:hover {
+    color: var(--gold-light);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   15. CONFETTI
+========================================================= */
+
+#confetti-container {
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    overflow: hidden;
+
+    z-index: 100;
+}
+
+
+.confetti {
+    position: absolute;
+
+    top: -20px;
+
+    width: 7px;
+    height: 12px;
+
+    opacity: 0;
+
+    animation:
+        confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+
+    0% {
+        opacity: 1;
+
+        transform:
+            translate3d(0, -20px, 0)
+            rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(var(--drift), 110vh, 0)
+            rotate(720deg);
+    }
+}
+
+
+/* =========================================================
+   16. ACCESSIBILITY
+========================================================= */
+
+.sr-only {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+}
+
+
+/* =========================================================
+   17. FOCUS STATES
+========================================================= */
+
+button:focus-visible {
+    outline: 1px solid var(--gold);
+
+    outline-offset: 5px;
+}
+
+
+/* =========================================================
+   18. TABLET
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .screen {
+        padding: 30px 20px;
+    }
+
+    .dua-container {
+        grid-template-columns: 1fr;
+    }
+
+    .dua-card {
+        min-height: auto;
+    }
+
+    .letter-wrapper,
+    .duas-content {
+        padding: 25px 0;
+    }
+
+}
+
+
+/* =========================================================
+   19. MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        overflow: hidden;
+    }
+
+    .screen {
+        padding: 25px 17px;
+
+        align-items: center;
+    }
+
+
+    /* Background */
+
+    .ambient-glow {
+        width: 250px;
+        height: 250px;
+
+        filter: blur(75px);
+    }
+
+
+    /* Typography */
+
+    .eyebrow {
+        margin-bottom: 17px;
+
+        font-size: 0.58rem;
+
+        letter-spacing: 0.27em;
+    }
+
+
+    /* Intro */
+
+    .intro-title {
+        font-size: clamp(2.9rem, 14vw, 4.4rem);
+
+        line-height: 0.95;
+    }
+
+    .intro-subtitle {
+        margin-bottom: 30px;
+
+        font-size: 0.82rem;
+
+        line-height: 1.8;
+    }
+
+
+    /* Buttons */
+
+    .primary-button {
+        min-width: 210px;
+
+        padding: 14px 20px;
+
+        gap: 14px;
+
+        font-size: 0.62rem;
+    }
+
+
+    /* Name */
+
+    .giant-name {
+        font-size: clamp(4.5rem, 23vw, 8rem);
+
+        letter-spacing: 0.02em;
+    }
+
+    .name-message {
+        font-size: 1.05rem;
+    }
+
+    .name-message.emphasis {
+        font-size: 0.95rem;
+    }
+
+
+    /* Birthday */
+
+    .birthday-title {
+        font-size: clamp(3rem, 15vw, 5rem);
+    }
+
+    .birthday-name {
+        font-size: clamp(3rem, 15vw, 5rem);
+    }
+
+    .birthday-intro {
+        font-size: 0.82rem;
+    }
+
+
+    /* Letter */
+
+    .letter-wrapper {
+        width: 100%;
+
+        max-height: 90vh;
+
+        overflow-y: auto;
+
+        scrollbar-width: none;
+    }
+
+    .letter-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    .letter-card {
+        border-radius: 3px;
+    }
+
+    .letter-top {
+        padding: 14px 17px;
+
+        font-size: 0.9rem;
+    }
+
+    .letter-body {
+        padding: 28px 22px;
+    }
+
+    .letter-body p {
+        margin-bottom: 18px;
+
+        font-size: 1rem;
+
+        line-height: 1.65;
+    }
+
+    .letter-body p:first-child {
+        font-size: 1.35rem;
+    }
+
+    .letter-body .highlight-text {
+        margin: 25px 0;
+
+        font-size: 1.35rem;
+    }
+
+    .letter-signature {
+        font-size: 1.05rem !important;
+    }
+
+
+    /* Duas */
+
+    .duas-content {
+        max-height: 92vh;
+
+        overflow-y: auto;
+
+        scrollbar-width: none;
+    }
+
+    .duas-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    .section-title {
+        margin-bottom: 27px;
+
+        font-size: 3.2rem;
+    }
+
+    .dua-container {
+        gap: 12px;
+    }
+
+    .dua-card {
+        padding: 23px;
+
+        min-height: 150px;
+    }
+
+    .dua-icon {
+        margin-bottom: 12px;
+
+        font-size: 1.25rem;
+    }
+
+    .dua-card p {
+        font-size: 1rem;
+
+        line-height: 1.55;
+    }
+
+    .ameen {
+        margin-top: 25px;
+
+        font-size: 1.05rem;
+    }
+
+
+    /* Final */
+
+    .final-content {
+        max-height: 92vh;
+
+        overflow-y: auto;
+
+        scrollbar-width: none;
+    }
+
+    .final-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    .final-title {
+        font-size: 3.1rem;
+    }
+
+    .final-name {
+        font-size: 4.5rem;
+    }
+
+    .final-message {
+        margin-top: 22px;
+
+        font-size: 1rem;
+
+        line-height: 1.6;
+    }
+
+    .final-emphasis {
+        font-size: 1.4rem;
+    }
+
+    .birthday-number {
+        margin-top: 20px;
+
+        font-size: 7rem;
+    }
+
+    .final-birthday {
+        font-size: 0.6rem;
+
+        letter-spacing: 0.4em;
+    }
+
+    .final-signature {
+        font-size: 1rem;
+    }
+
+}
+
+
+/* =========================================================
+   20. VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .screen {
+        padding: 20px 14px;
+    }
+
+    .intro-title {
+        font-size: 2.7rem;
+    }
+
+    .giant-name {
+        font-size: 4.3rem;
+    }
+
+    .birthday-title {
+        font-size: 2.8rem;
+    }
+
+    .birthday-name {
+        font-size: 2.8rem;
+    }
+
+    .letter-body {
+        padding: 23px 18px;
+    }
+
+    .dua-card {
+        padding: 20px;
+    }
+
+    .final-name {
+        font-size: 4rem;
+    }
+
+    .birthday-number {
+        font-size: 6rem;
+    }
+
+}
+
+
+/* =========================================================
+   21. REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+    }
+
+}
+```
