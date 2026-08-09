@@ -1,442 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Happy Birthday, Aqsa 🤍</title>
+<meta name="description" content="A little luxury surprise for Aqsa, from Iqra." />
 
-    <!-- Mobile responsiveness -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,900;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
-    <!-- Browser theme -->
-    <meta name="theme-color" content="#09070b">
-
-    <!-- SEO / Sharing -->
-    <meta
-        name="description"
-        content="A little birthday surprise made with love for Aqsa — from Iqra."
-    >
-
-    <title>For Aqsa — With Love, Iqra ♡</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- Main stylesheet -->
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-    <!-- =====================================================
-         BACKGROUND
-    ====================================================== -->
+<canvas id="ambient" aria-hidden="true"></canvas>
 
-    <div class="background">
+<!-- ===== Sealed Envelope Gate ===== -->
+<div id="envelope-screen">
+  <div class="envelope-wrap">
+    <p class="envelope-label">a private letter for</p>
+    <p class="envelope-name">Aqsa</p>
+    <div class="envelope" id="envelope">
+      <div class="envelope-shadow"></div>
+      <div class="envelope-body">
+        <div class="letter-peek"></div>
+        <div class="flap"></div>
+        <button class="seal" id="sealBtn" aria-label="Open the letter">
+          <span class="seal-glyph">A</span>
+        </button>
+      </div>
+    </div>
+    <p class="tap-hint">tap the seal to open</p>
+  </div>
+</div>
 
-        <div class="ambient-glow glow-one"></div>
-        <div class="ambient-glow glow-two"></div>
-        <div class="ambient-glow glow-three"></div>
+<!-- ===== Main Experience ===== -->
+<main id="main-content" hidden>
 
-        <div id="stars"></div>
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <p class="eyebrow reveal">15 . 08</p>
+    <h1 class="foil-text reveal">Happy Birthday</h1>
+    <h2 class="name-script reveal">Aqsa</h2>
+    <p class="hero-sub reveal">a small, luxury little surprise — made just for you, by Iqra</p>
+    <button class="scroll-cue reveal" id="scrollCue">
+      <span>read your letter</span>
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1V19M7 19L1 13M7 19L13 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </section>
 
+  <!-- Letter -->
+  <section class="letter-section" id="letterSection">
+    <div class="letter-card reveal">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+
+      <p class="letter-kicker">to my jaan, my jigar ka tukra</p>
+
+      <p class="letter-body">
+        Aqsa, meri jaan — before anything else in this world gets your attention today, this letter gets it first.
+        Today isn't just another day on the calendar. It's the day my favourite person was made — and honestly,
+        I still think it was the best decision the universe ever made.
+      </p>
+      <p class="letter-body">
+        You're not just my best friend. You're the person I text at 2am with nothing important to say, the one who
+        knows my silences as well as my stories, and the one I trust with the messiest, softest, most honest parts
+        of me. My bachaa. My jigar ka tukra. Mine.
+      </p>
+      <p class="letter-body">
+        So today, I wanted to give you something a little different — not flowers that wilt or a message that
+        disappears into a chat, but a tiny corner of the internet that's entirely, unapologetically yours.
+        Scroll on, meri jaan. There's a wish waiting for you.
+      </p>
+
+      <p class="letter-sign">with all my heart,<br><span>Iqra</span></p>
+    </div>
+  </section>
+
+  <!-- Cake / Wish -->
+  <section class="cake-section" id="cakeSection">
+    <h2 class="section-title reveal">Make a wish</h2>
+    <p class="section-sub reveal">tap each flame to blow out the candles</p>
+
+    <div class="cake-stage reveal">
+      <svg id="cakeSvg" viewBox="0 0 300 260" class="cake-svg" role="img" aria-label="Birthday cake with five candles">
+        <ellipse cx="150" cy="235" rx="118" ry="14" class="cake-shadow"/>
+
+        <!-- tier 2 -->
+        <rect x="55" y="150" width="190" height="70" rx="10" class="tier tier2"/>
+        <rect x="55" y="150" width="190" height="14" rx="7" class="tier-icing"/>
+        <g class="drips drips2">
+          <circle cx="80" cy="163" r="6"/><circle cx="120" cy="165" r="5"/>
+          <circle cx="165" cy="163" r="6"/><circle cx="205" cy="165" r="5"/>
+        </g>
+
+        <!-- tier 1 -->
+        <rect x="80" y="95" width="140" height="60" rx="10" class="tier tier1"/>
+        <rect x="80" y="95" width="140" height="14" rx="7" class="tier-icing"/>
+        <g class="drips drips1">
+          <circle cx="100" cy="108" r="5"/><circle cx="140" cy="110" r="4.5"/>
+          <circle cx="180" cy="108" r="5"/>
+        </g>
+
+        <!-- candles -->
+        <g class="candles">
+          <g class="candle" data-candle="1"><rect x="95" y="60" width="8" height="35" class="stick"/><g class="flame-group" data-flame="1"><path class="flame" d="M99 60c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
+          <g class="candle" data-candle="2"><rect x="128" y="52" width="8" height="43" class="stick"/><g class="flame-group" data-flame="2"><path class="flame" d="M132 52c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
+          <g class="candle" data-candle="3"><rect x="146" y="45" width="8" height="50" class="stick"/><g class="flame-group" data-flame="3"><path class="flame" d="M150 45c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
+          <g class="candle" data-candle="4"><rect x="164" y="52" width="8" height="43" class="stick"/><g class="flame-group" data-flame="4"><path class="flame" d="M168 52c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
+          <g class="candle" data-candle="5"><rect x="197" y="60" width="8" height="35" class="stick"/><g class="flame-group" data-flame="5"><path class="flame" d="M201 60c-5-6-5-12 0-18 5 6 5 12 0 18z"/></g></g>
+        </g>
+      </svg>
     </div>
 
-
-    <!-- =====================================================
-         MAIN EXPERIENCE
-    ====================================================== -->
-
-    <main id="birthday-experience">
-
-
-        <!-- =================================================
-             SCREEN 01 — INTRO
-        ================================================== -->
-
-        <section class="screen intro-screen active" id="intro">
-
-            <div class="intro-content">
-
-                <p class="eyebrow">
-                    A little something for you
-                </p>
-
-                <div class="tiny-heart">♡</div>
-
-                <h1 class="intro-title">
-                    Someone special<br>
-                    has a surprise for you.
-                </h1>
-
-                <p class="intro-subtitle">
-                    Take a little moment.<br>
-                    This one was made just for you.
-                </p>
-
-                <button
-                    class="primary-button"
-                    id="open-surprise"
-                    type="button"
-                >
-                    <span>Open Your Surprise</span>
-                    <span class="button-arrow">→</span>
-                </button>
-
-                <p class="signature">
-                    — Iqra
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SCREEN 02 — NAME REVEAL
-        ================================================== -->
-
-        <section class="screen name-screen" id="name-reveal">
-
-            <div class="name-content">
-
-                <p class="eyebrow">
-                    This day belongs to
-                </p>
-
-                <h2 class="giant-name">
-                    AQSA
-                </h2>
-
-                <div class="gold-line"></div>
-
-                <p class="name-message">
-                    The girl who is more than a best friend.
-                </p>
-
-                <p class="name-message emphasis">
-                    My jaan. My jigr ka tukra. My bachaa. ♡
-                </p>
-
-                <button
-                    class="text-button"
-                    id="continue-one"
-                    type="button"
-                >
-                    There's more →
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SCREEN 03 — BIRTHDAY REVEAL
-        ================================================== -->
-
-        <section class="screen birthday-screen" id="birthday">
-
-            <div class="birthday-content">
-
-                <p class="eyebrow">
-                    15 • August
-                </p>
-
-                <h2 class="birthday-title">
-                    Happy Birthday
-                </h2>
-
-                <h3 class="birthday-name">
-                    Aqsa
-                </h3>
-
-                <div class="birthday-symbol">
-                    ✦
-                </div>
-
-                <p class="birthday-intro">
-                    Today isn't just another day.
-                    <br>
-                    It's the day someone incredibly precious
-                    came into this world.
-                </p>
-
-                <button
-                    class="primary-button"
-                    id="continue-two"
-                    type="button"
-                >
-                    <span>Read Your Letter</span>
-                    <span class="button-arrow">→</span>
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SCREEN 04 — PERSONAL LETTER
-        ================================================== -->
-
-        <section class="screen letter-screen" id="letter">
-
-            <div class="letter-wrapper">
-
-                <p class="eyebrow">
-                    From my heart to yours
-                </p>
-
-                <div class="letter-card">
-
-                    <div class="letter-top">
-                        <span>♡</span>
-                        <span>For Aqsa</span>
-                        <span>♡</span>
-                    </div>
-
-                    <div class="letter-body">
-
-                        <p>
-                            Meri jaan Aqsa,
-                        </p>
-
-                        <p>
-                            I don't think a simple birthday wish
-                            could ever explain what you mean to me.
-                            Some people enter your life as friends,
-                            but somehow become family.
-                        </p>
-
-                        <p>
-                            And you became exactly that for me.
-                        </p>
-
-                        <p>
-                            You've been a part of so many memories,
-                            so many laughs, so many random moments,
-                            and so many little things that I'll always
-                            keep close to my heart.
-                        </p>
-
-                        <p class="highlight-text">
-                            I'm genuinely so lucky to have you.
-                        </p>
-
-                        <p>
-                            Today, I just want you to know that
-                            you are deeply loved, incredibly valued,
-                            and so very special.
-                        </p>
-
-                        <p>
-                            Happy Birthday, meri jaan.
-                        </p>
-
-                        <p class="letter-signature">
-                            Always your Iqra ♡
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <button
-                    class="text-button"
-                    id="continue-three"
-                    type="button"
-                >
-                    A few duas for you →
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SCREEN 05 — DUAS
-        ================================================== -->
-
-        <section class="screen duas-screen" id="duas">
-
-            <div class="duas-content">
-
-                <p class="eyebrow">
-                    My duas for you
-                </p>
-
-                <h2 class="section-title">
-                    May Allah...
-                </h2>
-
-                <div class="dua-container">
-
-                    <article class="dua-card">
-                        <span class="dua-number">01</span>
-                        <span class="dua-icon">🤲🏻</span>
-
-                        <p>
-                            May Allah bless you with a beautiful
-                            destiny and fill your life with
-                            endless happiness.
-                        </p>
-                    </article>
-
-
-                    <article class="dua-card">
-                        <span class="dua-number">02</span>
-                        <span class="dua-icon">✨</span>
-
-                        <p>
-                            May Allah make every difficulty
-                            in your life easier and every
-                            dream closer to reality.
-                        </p>
-                    </article>
-
-
-                    <article class="dua-card">
-                        <span class="dua-number">03</span>
-                        <span class="dua-icon">🌙</span>
-
-                        <p>
-                            May Allah protect your heart,
-                            grant you peace, and surround
-                            you with people who truly love you.
-                        </p>
-                    </article>
-
-
-                    <article class="dua-card">
-                        <span class="dua-number">04</span>
-                        <span class="dua-icon">💗</span>
-
-                        <p>
-                            May Allah give you countless
-                            reasons to smile and make this
-                            new year of your life beautiful.
-                        </p>
-                    </article>
-
-                </div>
-
-                <p class="ameen">
-                    Ameen ya Rabb-ul-Alameen. 🤲🏻
-                </p>
-
-                <button
-                    class="primary-button"
-                    id="continue-four"
-                    type="button"
-                >
-                    <span>One Last Surprise</span>
-                    <span class="button-arrow">→</span>
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             SCREEN 06 — FINAL SURPRISE
-        ================================================== -->
-
-        <section class="screen final-screen" id="final">
-
-            <div class="final-content">
-
-                <div class="final-sparkles">
-                    ✦ &nbsp; ✧ &nbsp; ✦
-                </div>
-
-                <p class="eyebrow">
-                    And finally...
-                </p>
-
-                <h2 class="final-title">
-                    Here's to
-                </h2>
-
-                <h3 class="final-name">
-                    YOU.
-                </h3>
-
-                <p class="final-message">
-                    Here's to another year of your beautiful
-                    existence, your crazy little moments,
-                    your laughter, your dreams, and everything
-                    that makes you...
-                </p>
-
-                <p class="final-emphasis">
-                    YOU. ♡
-                </p>
-
-                <div class="birthday-number">
-                    15
-                </div>
-
-                <p class="final-birthday">
-                    AUGUST
-                </p>
-
-                <div class="final-divider"></div>
-
-                <p class="final-signature">
-                    Happy Birthday, meri jaan Aqsa.
-                    <br>
-                    With all my love,
-                    <br>
-                    <strong>Iqra ♡</strong>
-                </p>
-
-                <button
-                    class="replay-button"
-                    id="replay"
-                    type="button"
-                >
-                    ↻ &nbsp; Experience Again
-                </button>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- =====================================================
-         CONFETTI CONTAINER
-    ====================================================== -->
-
-    <div id="confetti-container" aria-hidden="true"></div>
-
-
-    <!-- =====================================================
-         SCREEN READER / ACCESSIBILITY
-    ====================================================== -->
-
-    <div
-        id="live-region"
-        class="sr-only"
-        aria-live="polite"
-    ></div>
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
-
-    <script src="script.js"></script>
-
+    <p class="wish-msg" id="wishMsg" hidden>wish granted, meri jaan 🤍</p>
+  </section>
+
+  <!-- Keepsakes / gallery -->
+  <section class="gallery-section" id="gallerySection">
+    <h2 class="section-title reveal">Little moments, kept safe</h2>
+    <p class="section-sub reveal">a frame for every memory still to come</p>
+    <div class="frame-grid">
+      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>one</figcaption></figure>
+      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>two</figcaption></figure>
+      <figure class="frame reveal"><div class="frame-inner"><span>our memory</span></div><figcaption>three</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing-section">
+    <p class="closing-eyebrow reveal">last thing, before you go</p>
+    <p class="closing-text reveal">
+      Whatever this year holds, meri jaan — I hope it holds you gently. Happy birthday, Aqsa.
+      I love you more than I'll ever manage to type into a website.
+    </p>
+    <p class="closing-sign reveal">forever your Iqra ✦</p>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
 </body>
 </html>
-```
