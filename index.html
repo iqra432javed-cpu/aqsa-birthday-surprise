@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Happy Birthday, Aqsa 💗</title>
-<meta name="description" content="A little world made for you — from Iqra." />
+<title>??? for Aqsa</title>
+<meta name="description" content="You have no idea what this is yet." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Quicksand:wght@500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css" />
 </head>
@@ -16,218 +16,248 @@
 
 <canvas id="ambient" aria-hidden="true"></canvas>
 
-<!-- ===== 1. Opening screen ===== -->
+<!-- ===== Mystery gate — no hint of what this is ===== -->
 <div id="openScreen">
-  <p class="open-line reveal-in">Hey birthday girl&hellip; 💌</p>
-  <p class="open-line reveal-in">I made something for you.</p>
-  <button class="open-btn reveal-in" id="openBtn">✨ Open Your Surprise ✨</button>
+  <p class="open-eyebrow reveal-in">a little thing, for you</p>
+  <p class="open-line reveal-in">You have no idea what this is yet.</p>
+  <button class="open-btn reveal-in" id="openBtn">Begin</button>
 </div>
 
 <!-- ===== Main experience ===== -->
 <main id="main-content" hidden>
 
-  <!-- 2. Hero -->
-  <section class="hero" id="hero">
-    <p class="welcome-line reveal">Welcome, Aqsa. 💗</p>
-    <p class="welcome-sub reveal">Today, the whole little universe is celebrating you.</p>
+  <!-- Vault progress -->
+  <div class="vault-bar" id="vaultBar">
+    <span class="vault-dot" data-dot></span>
+    <span class="vault-dot" data-dot></span>
+    <span class="vault-dot" data-dot></span>
+    <span class="vault-dot" data-dot></span>
+    <span class="vault-dot" data-dot></span>
+  </div>
 
-    <p class="hero-eyebrow reveal">Happy Birthday</p>
-    <h1 class="name-reveal reveal">Aqsa <span class="sparkle">✨</span></h1>
-    <p class="hero-tag reveal">a little website for a very special person</p>
-
-    <div class="date-badge reveal">
-      <span>15</span><i></i><span>August</span><i></i><span>2026</span>
+  <!-- ===== Q1 ===== -->
+  <section class="question-block" id="q1">
+    <p class="q-kicker">question 1 of 5</p>
+    <h2 class="q-text">How are you feeling about this, right now?</h2>
+    <div class="q-options">
+      <button class="q-option" data-correct="false">Nervous</button>
+      <button class="q-option" data-correct="true">Curious</button>
+      <button class="q-option" data-correct="false">Suspicious of me</button>
     </div>
-
-    <button class="scroll-cue reveal" id="scrollCue">
-      <span>keep exploring</span>
-      <svg width="14" height="20" viewBox="0 0 14 20" fill="none"><path d="M7 1V19M7 19L1 13M7 19L13 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
+    <p class="q-hint">not quite — try another one</p>
   </section>
 
-  <!-- 3. Why you're special -->
-  <section class="about-section" id="aboutSection">
-    <h2 class="section-title reveal">things I hope you never forget&hellip;</h2>
-    <p class="section-sub reveal">tap each card</p>
+  <section class="surprise-block" id="surprise1" hidden>
+    <p class="unlock-tag">unlocked</p>
+    <div class="letter-card">
+      <p class="letter-body">Aqsa, meri jaan — before anything else today gets your attention, this letter gets it first.</p>
+      <p class="letter-body">You're not just my best friend. You're my jigar ka tukra, my bachaa — the one who knows my silences as well as my stories, and the one I trust with the messiest, softest parts of me.</p>
+      <p class="letter-body">No matter how much life changes, I hope you always know how much you mean to me.</p>
+      <p class="letter-sign">— Iqra</p>
+    </div>
+    <button class="continue-btn" data-next="q2">continue</button>
+  </section>
 
+  <!-- ===== Q2 ===== -->
+  <section class="question-block" id="q2" hidden>
+    <p class="q-kicker">question 2 of 5</p>
+    <h2 class="q-text">Pick a word that feels like us.</h2>
+    <div class="q-options">
+      <button class="q-option" data-correct="false">Chaos</button>
+      <button class="q-option" data-correct="true">Home</button>
+      <button class="q-option" data-correct="false">Complicated</button>
+    </div>
+    <p class="q-hint">not quite — try another one</p>
+  </section>
+
+  <section class="surprise-block" id="surprise2" hidden>
+    <p class="unlock-tag">unlocked</p>
+    <p class="section-title">things I hope you never forget</p>
     <div class="flip-grid">
-      <button class="flip-card reveal" data-flip>
+      <button class="flip-card" data-flip>
         <span class="flip-inner">
-          <span class="flip-face flip-front"><span class="flip-icon">💗</span><span>loved</span></span>
+          <span class="flip-face flip-front"><span>loved</span></span>
           <span class="flip-face flip-back">You are loved.</span>
         </span>
       </button>
-      <button class="flip-card reveal" data-flip>
+      <button class="flip-card" data-flip>
         <span class="flip-inner">
-          <span class="flip-face flip-front"><span class="flip-icon">✨</span><span>capable</span></span>
+          <span class="flip-face flip-front"><span>capable</span></span>
           <span class="flip-face flip-back">You are capable of amazing things.</span>
         </span>
       </button>
-      <button class="flip-card reveal" data-flip>
+      <button class="flip-card" data-flip>
         <span class="flip-inner">
-          <span class="flip-face flip-front"><span class="flip-icon">🌷</span><span>deserving</span></span>
+          <span class="flip-face flip-front"><span>deserving</span></span>
           <span class="flip-face flip-back">You deserve beautiful things.</span>
         </span>
       </button>
-      <button class="flip-card reveal" data-flip>
+      <button class="flip-card" data-flip>
         <span class="flip-inner">
-          <span class="flip-face flip-front"><span class="flip-icon">🫶🏻</span><span>cherished</span></span>
+          <span class="flip-face flip-front"><span>cherished</span></span>
           <span class="flip-face flip-back">You make ordinary days better.</span>
         </span>
       </button>
-      <button class="flip-card flip-card--wide reveal" data-flip>
+      <button class="flip-card flip-card--wide" data-flip>
         <span class="flip-inner">
-          <span class="flip-face flip-front"><span class="flip-icon">🤍</span><span>supported</span></span>
+          <span class="flip-face flip-front"><span>supported</span></span>
           <span class="flip-face flip-back">And you'll always have someone cheering for you.</span>
         </span>
       </button>
     </div>
+    <button class="continue-btn" data-next="q3">continue</button>
   </section>
 
-  <!-- 4. Memories scrapbook -->
-  <section class="memories-section" id="memoriesSection">
-    <h2 class="section-title reveal">our little memories</h2>
-    <p class="section-sub reveal">a lil scrapbook — more to come</p>
+  <!-- ===== Q3 ===== -->
+  <section class="question-block" id="q3" hidden>
+    <p class="q-kicker">question 3 of 5</p>
+    <h2 class="q-text">If today had a color, what would it be?</h2>
+    <div class="q-options">
+      <button class="q-option" data-correct="false">Gold</button>
+      <button class="q-option" data-correct="true">Blue</button>
+      <button class="q-option" data-correct="false">Pink</button>
+    </div>
+    <p class="q-hint">not quite — try another one</p>
+  </section>
 
+  <section class="surprise-block" id="surprise3" hidden>
+    <p class="unlock-tag">unlocked</p>
+    <p class="section-title">our memories</p>
     <div class="polaroid-row">
-      <button class="polaroid reveal" data-caption="The day we…">
-        <span class="polaroid-photo">📸</span>
+      <button class="polaroid" data-caption="The day we…">
+        <span class="polaroid-photo">✳</span>
         <span class="polaroid-caption">The day we&hellip;</span>
       </button>
-      <button class="polaroid reveal" data-caption="That one stupid moment 😂">
-        <span class="polaroid-photo">📸</span>
-        <span class="polaroid-caption">That one stupid moment 😂</span>
+      <button class="polaroid" data-caption="That one stupid moment">
+        <span class="polaroid-photo">✳</span>
+        <span class="polaroid-caption">That one stupid moment</span>
       </button>
-      <button class="polaroid reveal" data-caption="A memory I'll always keep.">
-        <span class="polaroid-photo">📸</span>
-        <span class="polaroid-caption">A memory I'll always keep.</span>
+      <button class="polaroid" data-caption="A memory I'll always keep">
+        <span class="polaroid-photo">✳</span>
+        <span class="polaroid-caption">A memory I'll always keep</span>
       </button>
     </div>
+    <button class="continue-btn" data-next="q4">continue</button>
   </section>
 
-  <!-- Polaroid lightbox -->
-  <div class="lightbox" id="lightbox">
-    <div class="lightbox-card">
-      <span class="lightbox-photo">📸</span>
-      <p class="lightbox-caption" id="lightboxCaption"></p>
-      <button class="lightbox-close" id="lightboxClose">close</button>
+  <!-- ===== Q4 ===== -->
+  <section class="question-block" id="q4" hidden>
+    <p class="q-kicker">question 4 of 5</p>
+    <h2 class="q-text">Choose your ending.</h2>
+    <div class="q-options">
+      <button class="q-option" data-correct="false">A quiet one</button>
+      <button class="q-option" data-correct="false">A loud one</button>
+      <button class="q-option" data-correct="true">A sweet one</button>
     </div>
-  </div>
-
-  <!-- 5. Letter -->
-  <section class="letter-section" id="letterSection">
-    <div class="letter-gate" id="letterGate">
-      <span class="letter-envelope-icon">💌</span>
-      <p class="letter-hint">You have a letter.</p>
-      <button class="letter-open-btn" id="letterOpenBtn">Open Letter</button>
-    </div>
-
-    <div class="letter-card" id="letterCard" hidden>
-      <p class="letter-body">
-        Aqsa, meri jaan — before anything else today gets your attention, this letter gets it first.
-      </p>
-      <p class="letter-body">
-        You're not just my best friend. You're my jigar ka tukra, my bachaa — the one who knows my
-        silences as well as my stories, and the one I trust with the messiest, softest parts of me.
-      </p>
-      <p class="letter-body">
-        No matter how much life changes, I hope you always know how much you mean to me.
-      </p>
-      <p class="letter-sign">— Iqra</p>
-    </div>
+    <p class="q-hint">not quite — try another one</p>
   </section>
 
-  <!-- 6. Cake -->
-  <section class="cake-section" id="cakeSection">
-    <h2 class="section-title reveal">okay birthday girl&hellip;</h2>
-    <p class="section-sub reveal">make a wish 🕯️</p>
-
-    <div class="cake-stage reveal">
+  <section class="surprise-block" id="surprise4" hidden>
+    <p class="unlock-tag">unlocked</p>
+    <p class="section-title">make a wish</p>
+    <div class="cake-stage">
       <svg id="cakeSvg" viewBox="0 0 260 230" class="cake-svg" role="img" aria-label="Birthday cake with three candles">
         <ellipse cx="130" cy="205" rx="102" ry="12" class="cake-shadow"/>
-        <rect x="45" y="130" width="170" height="65" rx="10" class="tier tier2"/>
-        <rect x="45" y="130" width="170" height="13" rx="6" class="tier-icing"/>
-        <rect x="68" y="82" width="124" height="55" rx="10" class="tier tier1"/>
-        <rect x="68" y="82" width="124" height="13" rx="6" class="tier-icing"/>
+        <rect x="45" y="130" width="170" height="65" rx="4" class="tier tier2"/>
+        <rect x="45" y="130" width="170" height="13" rx="2" class="tier-icing"/>
+        <rect x="68" y="82" width="124" height="55" rx="4" class="tier tier1"/>
+        <rect x="68" y="82" width="124" height="13" rx="2" class="tier-icing"/>
         <g class="candles">
-          <g class="candle" data-candle="1"><rect x="88" y="50" width="7" height="32" class="stick"/><g class="flame-group" data-flame="1"><path class="flame" d="M91.5 50c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
-          <g class="candle" data-candle="2"><rect x="126" y="40" width="7" height="42" class="stick"/><g class="flame-group" data-flame="2"><path class="flame" d="M129.5 40c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
-          <g class="candle" data-candle="3"><rect x="164" y="50" width="7" height="32" class="stick"/><g class="flame-group" data-flame="3"><path class="flame" d="M167.5 50c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
+          <g class="candle" data-candle="1"><rect x="88" y="50" width="6" height="32" class="stick"/><g class="flame-group" data-flame="1"><path class="flame" d="M91 50c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
+          <g class="candle" data-candle="2"><rect x="127" y="40" width="6" height="42" class="stick"/><g class="flame-group" data-flame="2"><path class="flame" d="M130 40c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
+          <g class="candle" data-candle="3"><rect x="166" y="50" width="6" height="32" class="stick"/><g class="flame-group" data-flame="3"><path class="flame" d="M169 50c-4.5-5.5-4.5-11 0-16.5 4.5 5.5 4.5 11 0 16.5z"/></g></g>
         </g>
       </svg>
     </div>
-
     <p class="wish-msg" id="wishMsg" hidden>
-      ✨ wish sent ✨<br>
-      <span>May Allah make every beautiful dua in your heart come true. Ameen. 🤲🏻</span>
+      wish sent
+      <span>May Allah make every beautiful dua in your heart come true. Ameen.</span>
     </p>
+    <button class="continue-btn" data-next="q5">continue</button>
   </section>
 
-  <!-- 7. Surprise boxes -->
-  <section class="surprise-section" id="surpriseSection">
-    <h2 class="section-title reveal">surprise boxes 🎁</h2>
-    <p class="section-sub reveal">open whichever one you need right now</p>
-
-    <div class="box-grid">
-      <div class="gift-box reveal">
-        <button class="gift-box-btn" data-box>🎁 open when you're happy</button>
-        <p class="gift-box-msg">Yay!! Stay in this feeling as long as you can. Send me a voice note and tell me everything — I want to hear it all. 💛</p>
-      </div>
-      <div class="gift-box reveal">
-        <button class="gift-box-btn" data-box>🎁 open when you're sad</button>
-        <p class="gift-box-msg">Hey. Whatever you're going through right now, remember bad days don't define your whole story. Take a breath. You'll get through this — and I'm one text away. 🤍</p>
-      </div>
-      <div class="gift-box reveal">
-        <button class="gift-box-btn" data-box>🎁 open when you miss me</button>
-        <p class="gift-box-msg">I miss you too, meri jaan. Call me — I genuinely don't care what time it is. 📞💗</p>
-      </div>
-      <div class="gift-box reveal">
-        <button class="gift-box-btn" data-box>🎁 open when you need a reminder</button>
-        <p class="gift-box-msg">You're doing better than you think you are, Aqsa. You always have been. ✨</p>
-      </div>
+  <!-- ===== Q5 ===== -->
+  <section class="question-block" id="q5" hidden>
+    <p class="q-kicker">question 5 of 5</p>
+    <h2 class="q-text">Last one. Are you ready?</h2>
+    <div class="q-options">
+      <button class="q-option" data-correct="false">Not yet</button>
+      <button class="q-option" data-correct="true">Always</button>
+      <button class="q-option" data-correct="false">Maybe</button>
     </div>
+    <p class="q-hint">not quite — try another one</p>
   </section>
 
-  <!-- 8. Duas -->
-  <section class="dua-section" id="duaSection">
-    <h2 class="section-title reveal">my duas for you 🤲🏻</h2>
+  <section class="surprise-block" id="surprise5" hidden>
+    <p class="unlock-tag">unlocked</p>
+    <p class="section-title">my duas for you</p>
     <div class="dua-list">
-      <p class="line-reveal" data-line>✨ May Allah protect your heart.</p>
-      <p class="line-reveal" data-line>✨ May Allah make your difficult days easier.</p>
-      <p class="line-reveal" data-line>✨ May Allah bless your future.</p>
-      <p class="line-reveal" data-line>✨ May Allah grant you success and peace.</p>
-      <p class="line-reveal" data-line>✨ May Allah surround you with genuine people.</p>
-      <p class="line-reveal" data-line>✨ May Allah fulfill the duas you don't even say out loud.</p>
-      <p class="line-reveal" data-line>Ameen. 🤍</p>
+      <p class="line-reveal" data-line>May Allah protect your heart.</p>
+      <p class="line-reveal" data-line>May Allah make your difficult days easier.</p>
+      <p class="line-reveal" data-line>May Allah bless your future.</p>
+      <p class="line-reveal" data-line>May Allah grant you success and peace.</p>
+      <p class="line-reveal" data-line>May Allah surround you with genuine people.</p>
+      <p class="line-reveal" data-line>May Allah fulfill the duas you don't even say out loud.</p>
+      <p class="line-reveal" data-line>Ameen.</p>
     </div>
+    <button class="continue-btn" data-next="finale">open the last one</button>
   </section>
 
-  <!-- 9. Time capsule -->
-  <section class="capsule-section" id="capsuleSection">
-    <h2 class="section-title reveal">⏳ time capsule</h2>
-    <p class="section-sub reveal">open this on your next birthday&hellip;</p>
+  <!-- ===== Grand finale ===== -->
+  <section class="final-section" id="finale" hidden>
+    <p class="final-and">and finally</p>
+    <h2 class="final-headline">Happy Birthday, Aqsa</h2>
+    <div class="rule"></div>
+    <p class="final-blessing">
+      May this year be kinder to you, brighter for you, and filled with everything your heart has been praying for.
+    </p>
+    <p class="final-sign">forever your Iqra</p>
 
-    <button class="capsule-box reveal" id="capsuleBox">
-      <span class="capsule-lock" id="capsuleLock">🔒</span>
-      <span class="capsule-label">Time Capsule</span>
+    <button class="ghost-btn" id="revealBonusBtn">there's a bit more</button>
+  </section>
+
+  <!-- ===== Bonus: surprise boxes + time capsule ===== -->
+  <section class="surprise-section" id="bonusSection" hidden>
+    <p class="section-kicker">for later</p>
+    <p class="section-title">open whichever one you need</p>
+    <div class="box-list">
+      <div class="gift-box">
+        <button class="gift-box-btn" data-box>when you're happy</button>
+        <p class="gift-box-msg">Yay!! Stay in this feeling as long as you can. Send me a voice note and tell me everything — I want to hear it all.</p>
+      </div>
+      <div class="gift-box">
+        <button class="gift-box-btn" data-box>when you're sad</button>
+        <p class="gift-box-msg">Hey. Whatever you're going through right now, remember bad days don't define your whole story. Take a breath. You'll get through this — and I'm one text away.</p>
+      </div>
+      <div class="gift-box">
+        <button class="gift-box-btn" data-box>when you miss me</button>
+        <p class="gift-box-msg">I miss you too, meri jaan. Call me — I genuinely don't care what time it is.</p>
+      </div>
+      <div class="gift-box">
+        <button class="gift-box-btn" data-box>when you need a reminder</button>
+        <p class="gift-box-msg">You're doing better than you think you are, Aqsa. You always have been.</p>
+      </div>
+    </div>
+
+    <p class="section-kicker" style="margin-top:70px;">for next year</p>
+    <p class="section-title">a time capsule</p>
+    <button class="capsule-box" id="capsuleBox">
+      <span class="capsule-lock" id="capsuleLock">locked</span>
       <span class="capsule-date">15 August 2027</span>
     </button>
-
     <p class="capsule-msg" id="capsuleMsg" hidden></p>
   </section>
 
-  <!-- 10. Final cinematic ending -->
-  <section class="final-section" id="finalSection">
-    <p class="final-and reveal">and finally&hellip;</p>
-    <h2 class="final-headline reveal">Happy Birthday, Aqsa! 🎂💗</h2>
-    <p class="final-blessing reveal">
-      May this year be kinder to you, brighter for you, and filled with everything your heart has been praying for.
-    </p>
-    <p class="final-made reveal">made with love, just for you. 💌</p>
-    <p class="final-sign reveal">forever your Iqra ✦</p>
-  </section>
-
 </main>
+
+<!-- Polaroid lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-card">
+    <span class="lightbox-photo">✳</span>
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+    <button class="lightbox-close" id="lightboxClose">close</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
