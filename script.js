@@ -1,24 +1,22 @@
 /* ===========================================================
-   "A Little World Made For You" — interactions
+   For Aqsa — mystery unlock game
    =========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
   initAmbientSparkles();
   initOpenScreen();
-  initScrollReveal();
-  initLineReveal();
-  initScrollCue();
+  initGameFlow();
   initFlipCards();
   initPolaroids();
-  initLetter();
   initCandles();
   initGiftBoxes();
   initTimeCapsule();
-  initFinalFireworks();
+  initLineReveal();
+  initBonusReveal();
 });
 
 /* -----------------------------------------------------------
-   1. Ambient gold sparkles + soft hearts (canvas)
+   1. Ambient sparkles (canvas)
 ----------------------------------------------------------- */
 function initAmbientSparkles() {
   const canvas = document.getElementById('ambient');
@@ -27,7 +25,7 @@ function initAmbientSparkles() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let w, h, bits;
-  const colors = ['#c9a24b', '#e8ce96', '#e9afc0'];
+  const colors = ['#3f6fe0', '#7fa0f0', '#eef2fa'];
 
   function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
 
@@ -81,7 +79,7 @@ function initAmbientSparkles() {
 }
 
 /* -----------------------------------------------------------
-   2. Opening screen
+   2. Mystery gate
 ----------------------------------------------------------- */
 function initOpenScreen() {
   const openBtn = document.getElementById('openBtn');
@@ -96,60 +94,80 @@ function initOpenScreen() {
     setTimeout(() => {
       main.hidden = false;
       document.body.style.overflow = '';
-      requestAnimationFrame(() => revealNow(document.querySelectorAll('.hero .reveal')));
     }, 700);
   });
 }
 
 /* -----------------------------------------------------------
-   3. Scroll-triggered reveal
+   3. Core game flow — question -> correct answer -> unlock
 ----------------------------------------------------------- */
-function initScrollReveal() {
-  const items = document.querySelectorAll('.reveal');
-  if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('in')); return; }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('in'); observer.unobserve(entry.target); }
+function initGameFlow() {
+  const questionBlocks = document.querySelectorAll('.question-block');
+  const dots = document.querySelectorAll('[data-dot]');
+  let unlockedCount = 0;
+
+  questionBlocks.forEach(block => {
+    const options = block.querySelectorAll('.q-option');
+    const hint = block.querySelector('.q-hint');
+
+    options.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.correct === 'true') {
+          options.forEach(o => o.disabled = true);
+          btn.classList.add('correct');
+          if (hint) hint.classList.remove('show');
+
+          unlockedCount++;
+          if (dots[unlockedCount - 1]) dots[unlockedCount - 1].classList.add('filled');
+
+          const surpriseId = 'surprise' + block.id.replace('q', '');
+          const surprise = document.getElementById(surpriseId);
+          if (surprise) {
+            surprise.hidden = false;
+            setTimeout(() => surprise.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+          }
+        } else {
+          btn.classList.add('wrong');
+          if (hint) hint.classList.add('show');
+          setTimeout(() => btn.classList.remove('wrong'), 420);
+        }
+      });
     });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-  items.forEach(el => observer.observe(el));
-}
+  });
 
-function revealNow(nodeList) {
-  nodeList.forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 150));
-}
+  document.querySelectorAll('[data-next]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const nextId = btn.dataset.next;
+      const next = document.getElementById(nextId);
+      if (!next) return;
+      next.hidden = false;
 
-/* -----------------------------------------------------------
-   4. Staggered line reveal (duas)
------------------------------------------------------------ */
-function initLineReveal() {
-  const lines = document.querySelectorAll('[data-line]');
-  if (!lines.length) return;
-  if (!('IntersectionObserver' in window)) { lines.forEach(el => el.classList.add('in')); return; }
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const index = Array.from(lines).indexOf(entry.target);
-        setTimeout(() => entry.target.classList.add('in'), index * 350);
-        observer.unobserve(entry.target);
+      if (nextId === 'finale') {
+        setTimeout(burstConfetti, 500);
       }
+
+      setTimeout(() => next.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
     });
-  }, { threshold: 0.4 });
-  lines.forEach(el => observer.observe(el));
+  });
 }
 
 /* -----------------------------------------------------------
-   5. Scroll cue
+   4. "there's a bit more" — reveal bonus section
 ----------------------------------------------------------- */
-function initScrollCue() {
-  const btn = document.getElementById('scrollCue');
-  const target = document.getElementById('aboutSection');
-  if (!btn || !target) return;
-  btn.addEventListener('click', () => target.scrollIntoView({ behavior: 'smooth' }));
+function initBonusReveal() {
+  const btn = document.getElementById('revealBonusBtn');
+  const bonus = document.getElementById('bonusSection');
+  if (!btn || !bonus) return;
+
+  btn.addEventListener('click', () => {
+    bonus.hidden = false;
+    btn.hidden = true;
+    setTimeout(() => bonus.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+  });
 }
 
 /* -----------------------------------------------------------
-   6. Flip cards
+   5. Flip cards
 ----------------------------------------------------------- */
 function initFlipCards() {
   document.querySelectorAll('[data-flip]').forEach(card => {
@@ -158,7 +176,7 @@ function initFlipCards() {
 }
 
 /* -----------------------------------------------------------
-   7. Polaroid lightbox
+   6. Polaroid lightbox
 ----------------------------------------------------------- */
 function initPolaroids() {
   const lightbox = document.getElementById('lightbox');
@@ -179,22 +197,7 @@ function initPolaroids() {
 }
 
 /* -----------------------------------------------------------
-   8. Letter
------------------------------------------------------------ */
-function initLetter() {
-  const gate = document.getElementById('letterGate');
-  const btn = document.getElementById('letterOpenBtn');
-  const card = document.getElementById('letterCard');
-  if (!gate || !btn || !card) return;
-
-  btn.addEventListener('click', () => {
-    gate.hidden = true;
-    card.hidden = false;
-  });
-}
-
-/* -----------------------------------------------------------
-   9. Candles — blow to reveal wish + dua
+   7. Candles
 ----------------------------------------------------------- */
 function initCandles() {
   const flames = document.querySelectorAll('.flame-group');
@@ -219,7 +222,7 @@ function initCandles() {
 }
 
 /* -----------------------------------------------------------
-   10. Gift boxes accordion
+   8. Gift boxes accordion
 ----------------------------------------------------------- */
 function initGiftBoxes() {
   document.querySelectorAll('[data-box]').forEach(btn => {
@@ -231,7 +234,7 @@ function initGiftBoxes() {
 }
 
 /* -----------------------------------------------------------
-   11. Time capsule — genuinely date-locked
+   9. Time capsule — genuinely date-locked
 ----------------------------------------------------------- */
 function initTimeCapsule() {
   const box = document.getElementById('capsuleBox');
@@ -243,51 +246,49 @@ function initTimeCapsule() {
   const now = new Date();
   const isUnlocked = now >= unlockDate;
 
-  if (isUnlocked) {
-    box.classList.add('unlocked');
-    lockIcon.textContent = '🔓';
-  }
+  lockIcon.textContent = isUnlocked ? 'open' : 'locked';
+  if (isUnlocked) box.classList.add('unlocked');
 
   box.addEventListener('click', () => {
     if (!isUnlocked) {
       msg.hidden = false;
-      msg.textContent = '🔒 this one is locked until 15 August 2027, meri jaan — come back next year.';
+      msg.textContent = 'this one is locked until 15 August 2027, meri jaan — come back next year.';
       return;
     }
     msg.hidden = false;
-    msg.textContent = "If you're reading this, another year has passed, Aqsa. I hope it treated you gently, and I hope whoever you've become is proud of the year behind her. Whatever happened between then and now — happy birthday, meri jaan. I still mean every word from the year before. 🤍";
+    msg.textContent = "If you're reading this, another year has passed, Aqsa. I hope it treated you gently, and I hope whoever you've become is proud of the year behind her. Happy birthday, meri jaan. I still mean every word from the year before.";
     burstConfetti();
   });
 }
 
 /* -----------------------------------------------------------
-   12. Final section — auto fireworks on scroll-into-view
+   10. Staggered line reveal (duas) — triggers once visible
 ----------------------------------------------------------- */
-function initFinalFireworks() {
-  const section = document.getElementById('finalSection');
-  if (!section) return;
-  if (!('IntersectionObserver' in window)) { burstConfetti(); return; }
+function initLineReveal() {
+  const lines = document.querySelectorAll('[data-line]');
+  if (!lines.length) return;
 
-  let fired = false;
+  if (!('IntersectionObserver' in window)) { lines.forEach(el => el.classList.add('in')); return; }
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting && !fired) {
-        fired = true;
-        setTimeout(burstConfetti, 600);
+      if (entry.isIntersecting) {
+        const index = Array.from(lines).indexOf(entry.target);
+        setTimeout(() => entry.target.classList.add('in'), index * 350);
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.5 });
-  observer.observe(section);
+  }, { threshold: 0.4 });
+
+  lines.forEach(el => observer.observe(el));
 }
 
 /* -----------------------------------------------------------
-   13. Confetti burst (no external libraries)
+   11. Confetti burst
 ----------------------------------------------------------- */
 function burstConfetti() {
-  const colors = ['#c9a24b', '#e8ce96', '#e9afc0', '#b5495b'];
-  const emojis = ['✨', '💗', '🎀', '🌸'];
-  const count = 70;
+  const colors = ['#3f6fe0', '#7fa0f0', '#eef2fa'];
+  const count = 44;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
 
@@ -295,25 +296,19 @@ function burstConfetti() {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
 
-    const useEmoji = Math.random() > 0.55;
-    const size = Math.random() * 10 + 10;
+    const size = Math.random() * 6 + 4;
     const left = Math.random() * 100;
-    const duration = Math.random() * 1.8 + 2.2;
-    const rotateEnd = Math.random() * 720 - 360;
-    const drift = Math.random() * 160 - 80;
+    const duration = Math.random() * 1.8 + 2.4;
+    const rotateEnd = Math.random() * 500 - 250;
+    const drift = Math.random() * 120 - 60;
 
     piece.style.left = left + 'vw';
-
-    if (useEmoji) {
-      piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      piece.style.fontSize = size + 'px';
-    } else {
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.width = size * 0.6 + 'px';
-      piece.style.height = size * 0.6 + 'px';
-      piece.style.background = color;
-      piece.style.borderRadius = '50%';
-    }
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.width = size + 'px';
+    piece.style.height = size + 'px';
+    piece.style.background = color;
+    piece.style.borderRadius = '50%';
+    piece.style.opacity = '.85';
 
     document.body.appendChild(piece);
 
