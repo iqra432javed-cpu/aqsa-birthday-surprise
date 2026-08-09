@@ -1,9 +1,9 @@
 /* ===========================================================
-   Aqsa's Birthday — interactions
+   Aqsa's 19th Birthday — interactions (Gen Z girly edition)
    =========================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initAmbientStars();
+  initAmbientSparkles();
   initOpenScreen();
   initScrollReveal();
   initLineReveal();
@@ -12,59 +12,88 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -----------------------------------------------------------
-   1. Ambient glowing stars / particles (canvas)
+   1. Ambient floating hearts + sparkles (canvas)
 ----------------------------------------------------------- */
-function initAmbientStars() {
+function initAmbientSparkles() {
   const canvas = document.getElementById('ambient');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  let w, h, stars;
+  let w, h, bits;
+  const colors = ['#ff5ca8', '#cdb4ff', '#ffb6d9', '#ffe08a'];
 
   function resize() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
   }
 
-  function makeStars() {
-    const count = Math.min(90, Math.floor((w * h) / 18000));
-    stars = Array.from({ length: count }, () => ({
+  function makeBits() {
+    const count = Math.min(46, Math.floor((w * h) / 30000));
+    bits = Array.from({ length: count }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
-      r: Math.random() * 1.4 + 0.3,
-      baseAlpha: Math.random() * 0.5 + 0.2,
-      twinkleSpeed: Math.random() * 0.02 + 0.006,
-      phase: Math.random() * Math.PI * 2,
-      drift: Math.random() * 0.06 - 0.03
+      size: Math.random() * 8 + 6,
+      speed: Math.random() * 0.3 + 0.08,
+      drift: Math.random() * 0.4 - 0.2,
+      alpha: Math.random() * 0.4 + 0.25,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: Math.random() > 0.5 ? 'heart' : 'sparkle',
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.01
     }));
   }
 
-  let t = 0;
+  function drawHeart(ctx, size) {
+    ctx.beginPath();
+    const s = size / 2;
+    ctx.moveTo(0, s * 0.3);
+    ctx.bezierCurveTo(0, -s * 0.3, -s, -s * 0.3, -s, s * 0.15);
+    ctx.bezierCurveTo(-s, s * 0.6, -s * 0.4, s * 0.85, 0, s * 1.15);
+    ctx.bezierCurveTo(s * 0.4, s * 0.85, s, s * 0.6, s, s * 0.15);
+    ctx.bezierCurveTo(s, -s * 0.3, 0, -s * 0.3, 0, s * 0.3);
+    ctx.fill();
+  }
+
+  function drawSparkle(ctx, size) {
+    const s = size / 2;
+    ctx.beginPath();
+    ctx.moveTo(0, -s); ctx.lineTo(s * 0.28, -s * 0.28);
+    ctx.lineTo(s, 0); ctx.lineTo(s * 0.28, s * 0.28);
+    ctx.lineTo(0, s); ctx.lineTo(-s * 0.28, s * 0.28);
+    ctx.lineTo(-s, 0); ctx.lineTo(-s * 0.28, -s * 0.28);
+    ctx.closePath();
+    ctx.fill();
+  }
+
   function tick() {
     ctx.clearRect(0, 0, w, h);
-    stars.forEach(s => {
-      const alpha = s.baseAlpha + Math.sin(t * s.twinkleSpeed + s.phase) * 0.25;
-      ctx.globalAlpha = Math.max(0, alpha);
-      ctx.fillStyle = '#f3dfa4';
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-      s.y -= s.drift;
-      if (s.y < -5) s.y = h + 5;
+    bits.forEach(b => {
+      ctx.save();
+      ctx.translate(b.x, b.y);
+      ctx.rotate(b.rot);
+      ctx.globalAlpha = b.alpha;
+      ctx.fillStyle = b.color;
+      if (b.shape === 'heart') drawHeart(ctx, b.size);
+      else drawSparkle(ctx, b.size);
+      ctx.restore();
+
+      b.y -= b.speed;
+      b.x += b.drift * 0.2;
+      b.rot += b.rotSpeed;
+      if (b.y < -20) { b.y = h + 20; b.x = Math.random() * w; }
     });
     ctx.globalAlpha = 1;
-    t++;
     if (!reduceMotion) requestAnimationFrame(tick);
   }
 
   resize();
-  makeStars();
+  makeBits();
   tick();
 
   window.addEventListener('resize', () => {
     resize();
-    makeStars();
+    makeBits();
     if (reduceMotion) tick();
   });
 }
@@ -86,7 +115,7 @@ function initOpenScreen() {
       main.hidden = false;
       document.body.style.overflow = '';
       requestAnimationFrame(() => revealNow(document.querySelectorAll('.hero .reveal')));
-    }, 700);
+    }, 650);
   });
 }
 
@@ -113,7 +142,7 @@ function initScrollReveal() {
 
 function revealNow(nodeList) {
   nodeList.forEach((el, i) => {
-    setTimeout(() => el.classList.add('in'), i * 160);
+    setTimeout(() => el.classList.add('in'), i * 150);
   });
 }
 
@@ -133,7 +162,7 @@ function initLineReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const index = Array.from(lines).indexOf(entry.target);
-        setTimeout(() => entry.target.classList.add('in'), index * 450);
+        setTimeout(() => entry.target.classList.add('in'), index * 420);
         observer.unobserve(entry.target);
       }
     });
@@ -143,7 +172,7 @@ function initLineReveal() {
 }
 
 /* -----------------------------------------------------------
-   5. "keep going" scroll cue
+   5. "keep scrolling bestie" cue
 ----------------------------------------------------------- */
 function initScrollCue() {
   const btn = document.getElementById('scrollCue');
@@ -153,7 +182,7 @@ function initScrollCue() {
 }
 
 /* -----------------------------------------------------------
-   6. Final glowing number — tap to reveal message + confetti
+   6. Final glowing "19" — tap to reveal message + confetti
 ----------------------------------------------------------- */
 function initFinalReveal() {
   const btn = document.getElementById('glowNumber');
@@ -172,10 +201,11 @@ function initFinalReveal() {
 }
 
 /* -----------------------------------------------------------
-   7. Lightweight DOM confetti burst (no external libraries)
+   7. Emoji + shape confetti burst (no external libraries)
 ----------------------------------------------------------- */
 function burstConfetti() {
-  const colors = ['#d4af37', '#f3dfa4', '#e8b4c8', '#f6f1e6', '#8f7127'];
+  const colors = ['#ff5ca8', '#cdb4ff', '#ffb6d9', '#ffe08a'];
+  const emojis = ['🎀', '💗', '✨', '🩷'];
   const count = 70;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
@@ -184,17 +214,25 @@ function burstConfetti() {
     const piece = document.createElement('div');
     piece.className = 'confetti-piece';
 
-    const size = Math.random() * 8 + 5;
+    const useEmoji = Math.random() > 0.55;
+    const size = Math.random() * 10 + 10;
     const left = Math.random() * 100;
-    const color = colors[Math.floor(Math.random() * colors.length)];
     const duration = Math.random() * 1.8 + 2.2;
     const rotateEnd = Math.random() * 720 - 360;
     const drift = Math.random() * 160 - 80;
 
     piece.style.left = left + 'vw';
-    piece.style.width = size + 'px';
-    piece.style.height = size * 0.4 + 'px';
-    piece.style.background = color;
+
+    if (useEmoji) {
+      piece.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      piece.style.fontSize = size + 'px';
+    } else {
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.width = size * 0.6 + 'px';
+      piece.style.height = size * 0.6 + 'px';
+      piece.style.background = color;
+      piece.style.borderRadius = '50%';
+    }
 
     document.body.appendChild(piece);
 
